@@ -1,0 +1,49 @@
+@extends('adminlte::page')
+
+@section('title', 'Home')
+
+@section('content_header')
+    {{-- {{ Breadcrumbs::render('home') }} --}}
+    <h1>Home</h1>
+@stop
+
+@section('content')
+
+<div class="col-md-12">
+    <div class="row-md-12">
+        
+        @if(env('APP_NAME') == 'Notificacoes')
+            <div class="col">
+                @include('components.adicionarNotificacoes')
+            </div>
+        @endif
+        
+        @include('components.extrajornada')
+        
+        {{-- <div class="col">
+            @include('components.minhasMissoes')
+        </div> --}}
+
+        <div class="col">
+            @include('components.notasParaIntranet')
+        </div>
+
+    </div>
+</div>
+
+@stop
+
+@section('css')
+<style>
+    /* TODO Retirado pois causava erro na home(scrool em resoluções menores) */
+    /* .col {
+    padding: 0 !important;
+    }
+    .col-md-12 {
+    padding: 0 !important;
+    }
+    .container-fluid {
+    padding: 0 !important;
+    } */
+</style>
+@stop

@@ -1,0 +1,15 @@
+.tamanho-botao {
+    width: 3.7rem;
+    height: 3.5rem;
+    /* display: flex; */
+    margin-left: 5px;
+    margin-bottom: 0 !important;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+.texto-botao {
+    position: relative;
+    /* top: 10px; */
+}
