@@ -64,7 +64,7 @@ Route::get('reload-captcha', function(){
 })->name('reload-captcha');
 // rota para reload do captcha
 
-Route::group(['middleware' => ['auth','auth2']],function (){
+Route::group(['middleware' => ['local.auth','auth','auth2']],function (){
 
     Route::get('auditoria', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware('autorizacao:Administrador;Auditoria')->name('auditoria');
 
