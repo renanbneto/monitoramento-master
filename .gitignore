@@ -13,3 +13,6 @@ yarn-error.log
 /.vscode
 /storage/logs/*.log
 
+# Certificados / bundles locais (Composer ou ferramentas)
+.windows-ca-bundle.pem
+.merged-ca-bundle.pem
