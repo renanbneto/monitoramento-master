@@ -41,13 +41,15 @@ class AdminLTELocal
                 'can'         =>  ['Administrador']
             ],
             [
-                'text'        => 'Prospecção LPR', 
+                'text'        => 'Prospecção LPR',
                 'url'         => '/prospeccoesLPR',
                 'icon'        => 'fas fa-camera',
-                //'can'         =>  []
             ],
-
-
+            [
+                'text'        => 'Grandes Eventos',
+                'url'         => '/eventos',
+                'icon'        => 'fas fa-calendar-alt',
+            ],
         ];
     }
 

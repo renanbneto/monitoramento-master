@@ -48,6 +48,20 @@ class CameraController extends Controller
         return view('monitoramento.view',compact('cameras'));
     }
 
+    public function statusJson()
+    {
+        $cameras = Camera::select('id', 'status', 'status_checked_at', 'status_response_ms')->get();
+        $result = [];
+        foreach ($cameras as $camera) {
+            $result[$camera->id] = [
+                'status'      => $camera->status ?? 'unknown',
+                'checked_at'  => $camera->status_checked_at?->toISOString(),
+                'response_ms' => $camera->status_response_ms,
+            ];
+        }
+        return response()->json($result);
+    }
+
     /**
      * Display a listing of the resource.
      *
