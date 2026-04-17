@@ -35,3 +35,24 @@ Breadcrumbs::for('exemplo', function ($trail) {
     $trail->parent('home');
     $trail->push('exemplo',route('exemplo.index'));
 });
+
+// Grandes Eventos
+Breadcrumbs::for('eventos.index', function ($trail) {
+    $trail->parent('home');
+    $trail->push('Grandes Eventos', route('eventos.index'));
+});
+
+Breadcrumbs::for('eventos.create', function ($trail) {
+    $trail->parent('eventos.index');
+    $trail->push('Novo Evento');
+});
+
+Breadcrumbs::for('eventos.show', function ($trail, $evento) {
+    $trail->parent('eventos.index');
+    $trail->push($evento->nome, route('eventos.show', $evento));
+});
+
+Breadcrumbs::for('eventos.edit', function ($trail, $evento) {
+    $trail->parent('eventos.show', $evento);
+    $trail->push('Editar');
+});

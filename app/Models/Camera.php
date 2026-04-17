@@ -26,11 +26,20 @@ class Camera extends Model
             'hostname',
             'link',
             'ativo',
+            'status',
+            'status_checked_at',
+            'status_response_ms',
     ];
 
     protected $casts = [
-        'ativo' => 'boolean',
+        'ativo'             => 'boolean',
+        'status_checked_at' => 'datetime',
     ];
+
+    public function eventos()
+    {
+        return $this->belongsToMany(\App\Models\Evento::class, 'evento_camera');
+    }
 
     /**
      * Reescreve o host do stream em tempo de leitura (ex.: dev atrás de proxy local).

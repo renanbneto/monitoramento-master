@@ -41,7 +41,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('enviar:logs')->daily();
-	$schedule->command('importar:config:sistemas')->cron('0 6,15,18 * * *');
+        $schedule->command('importar:config:sistemas')->cron('0 6,15,18 * * *');
+        $schedule->command('cameras:check-status')->everyFiveMinutes();
     }
 
     /**
