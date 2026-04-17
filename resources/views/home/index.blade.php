@@ -297,6 +297,25 @@
     </div>
 
 </div>
+
+{{-- Toolbar do mosaico inline --}}
+<div id="mosaico-inline-toolbar" style="display:none;">
+    <span class="text-white" style="font-size:13px;" id="mosaico-inline-count">0 câmera(s) carregada(s)</span>
+    <div class="float-right">
+        <button class="btn btn-sm btn-outline-warning mr-2" id="btn-selecao-area"
+                title="Selecionar câmeras por área no mapa">
+            <i class="fas fa-draw-polygon"></i> Selecionar por área
+        </button>
+        <button class="btn btn-sm btn-outline-danger" id="btn-limpar-mosaico">
+            <i class="fas fa-times"></i> Limpar tudo
+        </button>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+
+{{-- Mosaico inline de câmeras --}}
+<div id="mosaico-inline"></div>
+
 @stop
 
 @section('css')
@@ -306,6 +325,7 @@
     <link rel="stylesheet" href="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.css')}}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="{{ asset('vendor/select2/dist/css/select2.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <style>
 
 .custom-select {
@@ -356,8 +376,62 @@
         }
  */
         #mapa {
-            height: 93vh;
+            height: 60vh;
             width: 100%;
+        }
+
+        #mosaico-inline-toolbar {
+            background: #2d2d2d;
+            padding: 6px 12px;
+        }
+
+        #mosaico-inline {
+            display: none;
+            flex-wrap: wrap;
+            background: #1a1a1a;
+            padding: 4px;
+            min-height: 220px;
+        }
+
+        #mosaico-inline .camera-tile {
+            position: relative;
+            background: #000;
+            border: 1px solid #333;
+            padding: 0;
+        }
+
+        #mosaico-inline .camera-tile img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        #mosaico-inline .camera-tile .tile-header {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.65);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        #mosaico-inline .camera-tile .tile-header button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 0 2px;
+            line-height: 1;
+        }
+
+        #btn-selecao-area.ativo {
+            background-color: #f39c12;
+            color: #fff;
         }
 
         #mySidepanelLeft {
@@ -386,12 +460,15 @@
 <script src="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.min.js')}}"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
 <script>
-    
+
 
     var tracker;
     var layersCameras = L.layerGroup();
+    var mosaicoCameras = {};
+    var MAX_CAMERAS_MOSAICO = 9;
 
 var mosaicos = {
         m1:[],
@@ -1295,31 +1372,7 @@ mapa.addLayer(onibusUrbs);
                 rotationAngle: 0
             }).on('click',function(){
 
-                var streamUrl = obj.link;
-                if (!streamUrl || streamUrl === '#' || String(streamUrl).trim() === '') {
-                    return;
-                }
-
-                layersCameras.removeLayer(marker)
-
-                var bounds = L.latLngBounds(getCameraPoits([parseFloat(obj.lat),parseFloat(obj.lng)]));
-
-                var overlay = new L.imageOverlay(streamUrl, bounds,{
-                    opacity: 1,
-                    interactive: true,
-                    position: 'front',
-                    zIndex: '9999 !important'
-                }).addTo(mapa);
-
-                overlay.bringToFront();
-
-                L.DomEvent.on(overlay._image, 'dblclick', function(e) {
-                    mapa.removeLayer(overlay)
-                    overlay._image.src = '#'
-                    layersCameras.addLayer(marker)
-                    return
-
-                })
+                adicionarCameraAoMosaico(obj);
 
             }).on('contextmenu', function(event){
 
@@ -1344,6 +1397,7 @@ mapa.addLayer(onibusUrbs);
             })
             .setRotationOrigin('center');
 
+            marker.cameraData = obj;
             layersCameras.addLayer(marker)
 
         }
@@ -1423,5 +1477,145 @@ mapa.addLayer(onibusUrbs);
 
 
        TimerBuscaCameras();
+    </script>
+
+    <script>
+        // ─── Mosaico Inline ───────────────────────────────────────────────
+
+        function adicionarCameraAoMosaico(camera) {
+            if (!camera.link || camera.link === '#' || String(camera.link).trim() === '') {
+                toastr.warning('Esta câmera não possui link de stream configurado.');
+                return;
+            }
+            if (mosaicoCameras[camera.id]) {
+                var tile = document.getElementById('camera-tile-' + camera.id);
+                if (tile) tile.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                toastr.info('Câmera já está no mosaico.');
+                return;
+            }
+            if (Object.keys(mosaicoCameras).length >= MAX_CAMERAS_MOSAICO) {
+                toastr.warning('Limite de ' + MAX_CAMERAS_MOSAICO + ' câmeras no mosaico atingido. Remova uma para adicionar outra.');
+                return;
+            }
+
+            mosaicoCameras[camera.id] = camera;
+            renderizarMosaicoInline();
+            atualizarLayoutMosaico();
+
+            document.getElementById('mosaico-inline-toolbar').style.display = 'block';
+            document.getElementById('mosaico-inline').style.display = 'flex';
+            setTimeout(function () {
+                document.getElementById('mosaico-inline').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        function removerCameraDoMosaico(cameraId) {
+            delete mosaicoCameras[cameraId];
+            var count = Object.keys(mosaicoCameras).length;
+            if (count === 0) {
+                document.getElementById('mosaico-inline').style.display = 'none';
+                document.getElementById('mosaico-inline-toolbar').style.display = 'none';
+                document.getElementById('mosaico-inline').innerHTML = '';
+            } else {
+                renderizarMosaicoInline();
+            }
+            atualizarLayoutMosaico();
+        }
+
+        function renderizarMosaicoInline() {
+            var container = document.getElementById('mosaico-inline');
+            var cameras   = Object.values(mosaicoCameras);
+            var count     = cameras.length;
+
+            var colClass = count <= 1 ? 'col-12'
+                         : count <= 4 ? 'col-12 col-md-6'
+                         : 'col-12 col-md-4';
+
+            container.innerHTML = '';
+            cameras.forEach(function (cam) {
+                var div = document.createElement('div');
+                div.className = colClass + ' camera-tile';
+                div.id = 'camera-tile-' + cam.id;
+                div.innerHTML =
+                    '<div class="tile-header">' +
+                        '<span title="' + cam.local_nome + '">' + cam.local_nome + '</span>' +
+                        '<button onclick="removerCameraDoMosaico(' + cam.id + ')" title="Remover">' +
+                            '<i class="fas fa-times"></i>' +
+                        '</button>' +
+                    '</div>' +
+                    '<img src="' + cam.link + '" alt="' + cam.local_nome + '" ' +
+                         'onerror="this.src=\'{{ asset(\'images/camoff.png\') }}\'">';
+                container.appendChild(div);
+            });
+
+            document.getElementById('mosaico-inline-count').textContent =
+                count + ' câmera(s) carregada(s)';
+        }
+
+        function atualizarLayoutMosaico() {
+            var count = Object.keys(mosaicoCameras).length;
+            document.getElementById('mapa').style.height = count > 0 ? '60vh' : '93vh';
+            if (typeof mapa !== 'undefined') {
+                setTimeout(function () { mapa.invalidateSize(); }, 50);
+            }
+        }
+
+        document.getElementById('btn-limpar-mosaico').addEventListener('click', function () {
+            mosaicoCameras = {};
+            document.getElementById('mosaico-inline').style.display = 'none';
+            document.getElementById('mosaico-inline-toolbar').style.display = 'none';
+            document.getElementById('mosaico-inline').innerHTML = '';
+            atualizarLayoutMosaico();
+        });
+
+        // ─── Seleção por área (Leaflet.draw) ─────────────────────────────
+
+        var drawLayer   = null;
+        var drawControl = null;
+
+        // Inicializado após o mapa estar pronto
+        window.addEventListener('load', function () {
+            drawLayer = new L.FeatureGroup().addTo(mapa);
+        });
+
+        document.getElementById('btn-selecao-area').addEventListener('click', function () {
+            if (drawControl) {
+                drawControl.disable();
+                drawControl = null;
+                this.classList.remove('ativo');
+                return;
+            }
+
+            if (!drawLayer) drawLayer = new L.FeatureGroup().addTo(mapa);
+
+            this.classList.add('ativo');
+            toastr.info('Desenhe um retângulo no mapa para selecionar câmeras.', '', { timeOut: 4000 });
+
+            drawControl = new L.Draw.Rectangle(mapa, {
+                shapeOptions: { color: '#f39c12', weight: 2, fillOpacity: 0.1 }
+            });
+            drawControl.enable();
+        });
+
+        mapa.on(L.Draw.Event.CREATED, function (event) {
+            var bounds = event.layer.getBounds();
+            drawLayer.clearLayers();
+            drawControl = null;
+            document.getElementById('btn-selecao-area').classList.remove('ativo');
+
+            var selecionadas = 0;
+            layersCameras.eachLayer(function (marker) {
+                if (marker.cameraData && bounds.contains(marker.getLatLng())) {
+                    adicionarCameraAoMosaico(marker.cameraData);
+                    selecionadas++;
+                }
+            });
+
+            if (selecionadas === 0) {
+                toastr.warning('Nenhuma câmera encontrada na área selecionada.');
+            } else {
+                toastr.success(selecionadas + ' câmera(s) adicionada(s) ao mosaico.');
+            }
+        });
     </script>
 @stop
