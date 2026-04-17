@@ -27,4 +27,26 @@ class Camera extends Model
             'link',
             'ativo',
     ];
+
+    protected $casts = [
+        'ativo' => 'boolean',
+    ];
+
+    /**
+     * Reescreve o host do stream em tempo de leitura (ex.: dev atrás de proxy local).
+     * Defina CAMERAS_LINK_URL_SEARCH e CAMERAS_LINK_URL_REPLACE no .env.
+     */
+    public function getLinkAttribute(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+        $search = env('CAMERAS_LINK_URL_SEARCH');
+        $replace = env('CAMERAS_LINK_URL_REPLACE');
+        if ($search !== null && $search !== '' && $replace !== null) {
+            return str_replace($search, (string) $replace, $value);
+        }
+
+        return $value;
+    }
 }

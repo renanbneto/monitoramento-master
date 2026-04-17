@@ -94,7 +94,8 @@ trait Creator
             setlocale(LC_NUMERIC, $locale);
         }
 
-        static::setLastErrors(parent::getLastErrors());
+        $lastErrors = parent::getLastErrors();
+        static::setLastErrors(is_array($lastErrors) ? $lastErrors : []);
     }
 
     /**
@@ -636,6 +637,10 @@ trait Creator
         // First attempt to create an instance, so that error messages are based on the unmodified format.
         $date = self::createFromFormatAndTimezone($format, $time, $tz);
         $lastErrors = parent::getLastErrors();
+        // PHP 8.2+: getLastErrors() may return false when there are no warnings/errors
+        if ($lastErrors === false) {
+            $lastErrors = ['warning_count' => 0, 'warnings' => [], 'error_count' => 0, 'errors' => []];
+        }
         /** @var \Carbon\CarbonImmutable|\Carbon\Carbon|null $mock */
         $mock = static::getMockedTestNow($tz);
 

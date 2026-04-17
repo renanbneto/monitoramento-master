@@ -10,6 +10,7 @@ use App\Http\Controllers\TipoController;
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\TelefoneController;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
@@ -35,7 +36,7 @@ Route::get('reload-captcha', function(){
 // rota para reload do captcha
 
 
-Route::group(['middleware' => ['auth','auth2']],function (){
+Route::group(['middleware' => ['local.auth','auth','auth2']],function (){
 
 
     Route::resource('prospeccoesLPR', ProspeccaoLPRController::class);
@@ -51,85 +52,94 @@ Route::group(['middleware' => ['auth','auth2']],function (){
     Route::post('atualizaMosaicos', [CameraController::class,'atualizaMosaicos'])->name('atualizaMosaicos');
     Route::resource('cameras', CameraController::class);
 
-    Route::get('onibus', function(){
+    Route::get('onibus', function () {
+        $httpOptions = static function (): array {
+            $base = ['timeout' => 25, 'connect_timeout' => 10];
+            if (app()->environment('local')) {
+                return $base;
+            }
+            $proxy = env('ONIBUS_HTTP_PROXY', 'http://proxy-02.pr.gov.br:8000');
+
+            return array_merge($base, ['proxy' => $proxy]);
+        };
+
+        $fetchUrbs = static function (string $path) use ($httpOptions) {
+            $url = 'https://transporteservico.urbs.curitiba.pr.gov.br/'.$path.'?c=ea7b9';
+            $response = Http::withOptions($httpOptions())->get($url);
+            if (! $response->successful()) {
+                return null;
+            }
+            $json = $response->json();
+            if (is_array($json)) {
+                return $json;
+            }
+            $decoded = json_decode($response->body(), true);
+
+            return is_array($decoded) ? $decoded : null;
+        };
+
         try {
+            $registros = Cache::remember('onibus', 10, function () use ($fetchUrbs) {
+                $linhas = Cache::remember('linhas', 60 * 60, function () use ($fetchUrbs) {
+                    $data = $fetchUrbs('getLinhas.php');
 
-            /* $response = Http::withOptions([
-                'proxy' => 'http://proxy-02.pr.gov.br:8000'
-            ])->get('https://transporteservico.urbs.curitiba.pr.gov.br/getVeiculos.php?c=ea7b9');
-            return $response->json(); */
-
-            return Cache::remember('onibus', 10, function () {
-
-
-                $linhas =  Cache::remember('linhas', 60*60, function () {
-                
-                    $response = Http::withOptions([
-                        'proxy' => 'http://proxy-02.pr.gov.br:8000'
-                    ])->get('https://transporteservico.urbs.curitiba.pr.gov.br/getLinhas.php?c=ea7b9');
-                    
-                    return $response->json();
-                    
+                    return is_array($data) ? $data : [];
                 });
 
-                $response = Http::withOptions([
-                    'proxy' => 'http://proxy-02.pr.gov.br:8000'
-                ])->get('https://transporteservico.urbs.curitiba.pr.gov.br/getVeiculos.php?c=ea7b9');
-                $registros = json_decode($response->body(),true);
-                
-                $now = Carbon::now('America/Sao_Paulo');
-                
-                $onibus = new \stdClass();
-
-                foreach ($registros as $prefixo => &$veiculo) {
-                    
-                    // Obtém a hora de "refresh" no formato H:i
-                    $refreshTime = Carbon::createFromFormat('H:i', $veiculo["REFRESH"],'America/Sao_Paulo');
-
-                    // Ajuste para o caso onde a hora de refresh é maior que a hora atual (indicando data anterior)
-                    if ($refreshTime->gt($now)) {
-                        // Subtrai um dia, pois o refresh é do dia anterior
-                        $refreshTime->subDay();
-                    }
-                    
-                    // Calcula a diferença em minutos
-                    $minutesDiff = $now->diffInMinutes($refreshTime);
-
-                    
-                    // Define o status com base na diferença de tempo
-                    if ($minutesDiff <= 2) {
-                        $status = 'online';
-                    } elseif ($minutesDiff <= 5) {
-                        $status = 'atrasado';
-                    } elseif ($minutesDiff <= 10) {
-                        $status = 'offline';
-                    } else {
-                        $status = 'desconhecido';
-                    }
-
-                    if($veiculo["CODIGOLINHA"] != '' && $veiculo["CODIGOLINHA"] != 'REC'){
-
-                        $linha = collect($linhas)->firstWhere('COD', $veiculo["CODIGOLINHA"]);
-    
-                        if($linha){
-                            $veiculo["NOME_LINHA"] = $linha["NOME"];
-                            $veiculo["CATEGORIA_LINHA"] = $linha["CATEGORIA_SERVICO"];
-                            $veiculo["COR_LINHA"] = $linha["NOME_COR"];
-                        }
-                    }
-                    
-                    
-                    // Adiciona o campo "status" ao veículo
-                    $veiculo["STATUS"] = $status;
-
+                $registros = $fetchUrbs('getVeiculos.php');
+                if (! is_array($registros)) {
+                    return [];
                 }
 
-                return json_encode($registros);
+                $now = Carbon::now('America/Sao_Paulo');
+
+                foreach ($registros as $prefixo => &$veiculo) {
+                    if (! is_array($veiculo)) {
+                        continue;
+                    }
+
+                    $status = 'desconhecido';
+                    if (! empty($veiculo['REFRESH'])) {
+                        try {
+                            $refreshTime = Carbon::createFromFormat('H:i', $veiculo['REFRESH'], 'America/Sao_Paulo');
+                            if ($refreshTime->gt($now)) {
+                                $refreshTime->subDay();
+                            }
+                            $minutesDiff = $now->diffInMinutes($refreshTime);
+                            if ($minutesDiff <= 2) {
+                                $status = 'online';
+                            } elseif ($minutesDiff <= 5) {
+                                $status = 'atrasado';
+                            } elseif ($minutesDiff <= 10) {
+                                $status = 'offline';
+                            }
+                        } catch (\Throwable $e) {
+                            $status = 'desconhecido';
+                        }
+                    }
+
+                    $codLinha = $veiculo['CODIGOLINHA'] ?? '';
+                    if ($codLinha !== '' && $codLinha !== 'REC') {
+                        $linha = collect($linhas)->firstWhere('COD', $codLinha);
+                        if ($linha) {
+                            $veiculo['NOME_LINHA'] = $linha['NOME'] ?? null;
+                            $veiculo['CATEGORIA_LINHA'] = $linha['CATEGORIA_SERVICO'] ?? null;
+                            $veiculo['COR_LINHA'] = $linha['NOME_COR'] ?? null;
+                        }
+                    }
+
+                    $veiculo['STATUS'] = $status;
+                }
+                unset($veiculo);
+
+                return $registros;
             });
 
-            
+            return response()->json($registros);
         } catch (\Throwable $th) {
-            return response($th->getMessage(),500);
+            report($th);
+
+            return response()->json([]);
         }
     });
 
