@@ -1,6 +1,10 @@
 /public/hot
 /public/storage
 /storage/*.key
+
+# Dependências front-end (não versionar)
+/node_modules
+
 .env
 .env.backup
 .phpunit.result.cache
