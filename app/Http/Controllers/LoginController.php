@@ -23,9 +23,9 @@ class LoginController extends Controller
             abort(403); // desautoriza acesso em caso de falta de token
         }
 
-        $chave = env('SIA_CHAVE_ASSINATURA');
-        $id_sw = env('SIA_ID_SOFTWARE');
-        $nome_sw = env('SIA_ID_SOFTWARE');
+        $chave = config('sia.chave_assinatura');
+        $id_sw = config('sia.id_software');
+        $nome_sw = config('sia.id_software');
         $ip = Str::beforeLast(request()->server('HTTP_HOST'),':');
 
         try{ // Tenta decodificar o token recebido
@@ -88,7 +88,7 @@ class LoginController extends Controller
         try{
 
             Log::auditoria([
-                'sistema' => env('SIA_ID_SOFTWARE'),
+                'sistema' => config('sia.id_software'),
                // 'nome' => session()->get('user')->nome ?? null,
                // 'rg' => session()->get('user')->rg ?? null,
               //  'cpf' => session()->get('user')->cpf ?? null,
@@ -103,9 +103,9 @@ class LoginController extends Controller
                 'detalhes' => "Tentativa de recuperação de acesso para o email $email"
             ]);
 
-            $chave = env('SIA_CHAVE_ASSINATURA');
-                $id_sw = env('SIA_ID_SOFTWARE');
-                $nome_sw = env('SIA_ID_SOFTWARE');
+            $chave = config('sia.chave_assinatura');
+                $id_sw = config('sia.id_software');
+                $nome_sw = config('sia.id_software');
                 $ip = Log::getIP();
 
                 // criar token do sw
@@ -127,7 +127,7 @@ class LoginController extends Controller
                     return [];
                 }
 
-            $retorno = Http::withOptions(['verify' => env('SIA_SSL_VERIFY')])->retry(3)->timeout(10)->post(env('DOMINIO_SIA').':'.env('PORTA_SIA').'/'.env('PATH_RESET_SENHA_SIA'),[
+            $retorno = Http::withOptions(['verify' => config('sia.verify_ssl')])->retry(3)->timeout(10)->post(config('sia.urls.reset_senha'),[
                 'email' => $email,
                 'token' => $token,
                 'sw' => $nome_sw
@@ -155,7 +155,7 @@ class LoginController extends Controller
 
         try{
 
-            $retorno = Http::withOptions(['verify' => env('SIA_SSL_VERIFY')])->timeout(10)->get('//'.env('DOMINIO_SIA').':'.env('PORTA_SIA').'/'.env('PATH_VIEW_LOGIN_SIA')); // Busca view de login no servidor do sia
+            $retorno = Http::withOptions(['verify' => config('sia.verify_ssl')])->timeout(10)->get(config('sia.urls.view_login')); // Busca view de login no servidor do sia
 
             // Atualizar arquivo login.blade.php
             //Storage::disk('login')->put('login.blade.php',$retorno); // Atualiza a view de login Local com a view de login recebida do servidor sia
@@ -169,7 +169,7 @@ class LoginController extends Controller
     public function logout()
     {
         Log::auditoria([
-            'sistema' => env('SIA_ID_SOFTWARE'),
+            'sistema' => config('sia.id_software'),
             'nome' => session()->get('user')->nome ?? null,
             'rg' => session()->get('user')->rg ?? null,
             'cpf' => session()->get('user')->cpf ?? null,
@@ -211,9 +211,9 @@ class LoginController extends Controller
 
         $usuario = request()->input('usuario');
         $senha = request()->input('senha');
-        $chave = env('SIA_CHAVE_ASSINATURA');
-        $id_sw = env('SIA_ID_SOFTWARE');
-        $nome_sw = env('SIA_ID_SOFTWARE');
+        $chave = config('sia.chave_assinatura');
+        $id_sw = config('sia.id_software');
+        $nome_sw = config('sia.id_software');
         $ip = Str::beforeLast(request()->server('HTTP_HOST'),':');
 
         // criar token do sw consulta efetivo
@@ -261,7 +261,7 @@ class LoginController extends Controller
             }
 			
 
-	$retorno = Http::withOptions(['verify' => env('SIA_SSL_VERIFY')])->retry(3)->timeout(30)->post('//'.env('DOMINIO_SIA').':'.env('PORTA_SIA').'/'.env('PATH_AUTH_SIA'), $dados); // Realiza a autenticação do usuario no sia
+	$retorno = Http::withOptions(['verify' => config('sia.verify_ssl')])->retry(3)->timeout(30)->post(config('sia.urls.auth'), $dados); // Realiza a autenticação do usuario no sia
 	
 	
 	$res = $retorno->json();
@@ -278,9 +278,9 @@ class LoginController extends Controller
 						'otpData' => $res
 					]);
 			   }elseif ($res["status"] == 'recadastramento_requerido') {// Bloco de identificação de recadastramento obrigatório
-					$chave = env('SIA_CHAVE_ASSINATURA');
-					$id_sw = env('SIA_ID_SOFTWARE');
-					$nome_sw = env('SIA_ID_SOFTWARE');
+					$chave = config('sia.chave_assinatura');
+					$id_sw = config('sia.id_software');
+					$nome_sw = config('sia.id_software');
 					$ip = Str::beforeLast(request()->server('HTTP_HOST'),':');
 
 					// criar token do sw
@@ -370,7 +370,7 @@ class LoginController extends Controller
         Session::put('autorizacoes',$decoded->autorizacoes);// TODO
 
         Log::auditoria([
-            'sistema' => env('SIA_ID_SOFTWARE'),
+            'sistema' => config('sia.id_software'),
             'nome' => session()->get('user')->nome ?? null,
             'rg' => session()->get('user')->rg ?? null,
             'cpf' => session()->get('user')->cpf ?? null,
