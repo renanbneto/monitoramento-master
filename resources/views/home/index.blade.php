@@ -302,11 +302,10 @@
 @section('css')
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.2.0/Control.FullScreen.css" integrity="sha512-OyIJmh4XggYsUxdlYua68RMPbPo/5b63LHzoLETEVwubMGcJp9IrbmxxydRZw41FiOKAK0M60eOiqkRq59OwpA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('vendor/leaflet-fullscreen/Control.FullScreen.css') }}">
     <link rel="stylesheet" href="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.css')}}">
-    <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css " rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('vendor/select2/dist/css/select2.css') }}" />
     <style>
 
 .custom-select {
@@ -383,11 +382,10 @@
 @section('js')
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.2.0/Control.FullScreen.min.js" integrity="sha512-10PRJppn1d6/3lrfc+7e4S+0mfdNFLlv3QmDpwISpVsrPdkSccy/T22neLEWc5cmL6biDscH3WwrhHam9vMOIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ asset('vendor/leaflet-fullscreen/Control.FullScreen.min.js') }}"></script>
 <script src="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.min.js')}}"></script>
-<script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js "></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
 
 <script>
     
@@ -1151,7 +1149,7 @@ busIconatrasado: L.icon({
 
   // Função para buscar dados da API
   buscarDados: function () {
-    fetch(this.url)
+    fetch(this.url, { credentials: 'same-origin' })
       .then(response => {
         if (!response.ok) {
           throw new Error('Erro ao buscar os dados');
@@ -1168,22 +1166,27 @@ busIconatrasado: L.icon({
 
   // Atualizar o objeto de veículos e marcadores
   atualizarVeiculos: function (data) {
-    // Atualizar o objeto veiculos com os novos dados
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      return;
+    }
     this.veiculos = data;
 
-    // Iterar sobre os veículos e atualizar ou adicionar marcadores no mapa
     Object.keys(this.veiculos).forEach(cod => {
       const veiculo = this.veiculos[cod];
-      const lat = parseFloat(veiculo.LAT);
-      const lon = parseFloat(veiculo.LON);
+      if (!veiculo || typeof veiculo !== 'object') {
+        return;
+      }
+      const lat = parseFloat(String(veiculo.LAT || '').replace(',', '.'));
+      const lon = parseFloat(String(veiculo.LON || '').replace(',', '.'));
+      if (!isFinite(lat) || !isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+        return;
+      }
 
-      // Se o veículo já tem um marcador, movê-lo, senão criar um novo marcador
       if (this.markers[cod]) {
-        this.markers[cod].setLatLng([lat, lon]); // Mover marcador existente
-        // Mudar Icon do marcador
+        this.markers[cod].setLatLng([lat, lon]);
       } else {
-        // Criar novo marcador e adicionar ao mapa (usando o mapa global)
-        let iconM = this[`busIcon${veiculo.STATUS}`];
+        var st = veiculo.STATUS || 'desconhecido';
+        var iconM = this['busIcon' + st] || this.busIcondesconhecido;
         this.markers[cod] = L.marker([lat, lon],{ 
             icon: iconM,
             categoria: veiculo.CATEGORIA_LINHA || 'RECOLHENDO',
@@ -1213,6 +1216,8 @@ busIconatrasado: L.icon({
 
 // Iniciar o fetch periódico
 veiculosDataFetcher.iniciar();
+// Exibir ônibus por padrão (marcadores são adicionados em onibusUrbs; sem isso a camada fica desligada até o usuário marcar no controle)
+mapa.addLayer(onibusUrbs);
     </script>
 
 
