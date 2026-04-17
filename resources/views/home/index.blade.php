@@ -411,7 +411,18 @@ var mosaicos = {
 $.ajax({
     url:'{{route('mosaicos')}}',
     success: function(data) {
-        mosaicosBanco = JSON.parse(data.mosaico);
+        try {
+            var raw = (data && data.mosaico != null) ? data.mosaico : '{}';
+            if (typeof raw !== 'string') {
+                raw = JSON.stringify(raw);
+            }
+            mosaicosBanco = JSON.parse(raw || '{}');
+        } catch (e) {
+            mosaicosBanco = {};
+        }
+        if (!mosaicosBanco || typeof mosaicosBanco !== 'object') {
+            mosaicosBanco = {};
+        }
 
         for (let index = 1; index <= 10; index++) {
 
@@ -423,7 +434,18 @@ $.ajax({
 
         mosaicos = mosaicosBanco;
 
-        localStorage.setItem('mosaicos', JSON.stringify(mosaicosBanco));
+        try {
+            localStorage.setItem('mosaicos', JSON.stringify(mosaicosBanco));
+        } catch (e) {
+            /* Tracking Prevention / modo privado pode bloquear storage */
+        }
+    },
+    error: function () {
+        mosaicosBanco = {};
+        for (let index = 1; index <= 10; index++) {
+            mosaicosBanco['m' + index] = [];
+        }
+        mosaicos = mosaicosBanco;
     }
 });
 
@@ -1210,7 +1232,35 @@ veiculosDataFetcher.iniciar();
         }
 
         //Insere viatura no mapa
+        function isValidCameraLatLng(lat, lng) {
+            if (lat === null || lat === undefined || lng === null || lng === undefined) {
+                return false;
+            }
+            var sLat = String(lat).trim();
+            var sLng = String(lng).trim();
+            if (sLat === '' || sLng === '') {
+                return false;
+            }
+            // Erros comuns de planilha (fórmula quebrada)
+            if (/^#/.test(sLat) || /^#/.test(sLng)) {
+                return false;
+            }
+            var la = parseFloat(sLat.replace(',', '.'));
+            var lo = parseFloat(sLng.replace(',', '.'));
+            if (!isFinite(la) || !isFinite(lo)) {
+                return false;
+            }
+            if (la < -90 || la > 90 || lo < -180 || lo > 180) {
+                return false;
+            }
+            return true;
+        }
+
         function addCameraMark(obj){
+
+            if (!isValidCameraLatLng(obj.lat, obj.lng)) {
+                return;
+            }
 
             if(obj.ativo){
 
@@ -1228,7 +1278,7 @@ veiculosDataFetcher.iniciar();
                 });
             }
 
-            var marker = L.marker([obj.lat,obj.lng], {
+            var marker = L.marker([parseFloat(String(obj.lat).replace(',', '.')), parseFloat(String(obj.lng).replace(',', '.'))], {
                 contextmenu: true,
                 contextmenuItems: [{
                     text: 'Circle 1',
@@ -1240,12 +1290,16 @@ veiculosDataFetcher.iniciar();
                 rotationAngle: 0
             }).on('click',function(){
 
+                var streamUrl = obj.link;
+                if (!streamUrl || streamUrl === '#' || String(streamUrl).trim() === '') {
+                    return;
+                }
 
                 layersCameras.removeLayer(marker)
 
                 var bounds = L.latLngBounds(getCameraPoits([parseFloat(obj.lat),parseFloat(obj.lng)]));
 
-                var overlay = new L.imageOverlay( [obj.link], bounds,{
+                var overlay = new L.imageOverlay(streamUrl, bounds,{
                     opacity: 1,
                     interactive: true,
                     position: 'front',

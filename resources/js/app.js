@@ -1,3 +1,3 @@
 require('./bootstrap');
-require('../../public/js/intranet');
+require('../../public/js/intranetTemplate');
 require('../../node_modules/jsgrid/dist/jsgrid');

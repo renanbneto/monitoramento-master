@@ -21,7 +21,5 @@ $fa-font-path:        "../webfonts";
 // JSGrid
 @import '~jsgrid/dist/jsgrid.css';
 
-// Custom
-@import '../css/intranet.css';
-
+// Custom — intranetTemplate.css é servido pelo layout (AdminLTE); não importar aqui no Mix.
 

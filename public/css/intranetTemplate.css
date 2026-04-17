@@ -15,7 +15,7 @@
   background-color: #fff;
   z-index: 50;
   text-align: center;
-  margin: auto,
+  margin: auto;
 }
 
 #loading-image {
@@ -53,7 +53,7 @@ label.error{
   color: rgb(223, 128, 128);
   font-size: 12px;
   text-transform: uppercase;
-  padding-left: 10px
+  padding-left: 10px;
 }
 
 /* Padroização de estilos para o JsGrid */
@@ -77,8 +77,8 @@ label.error{
 /* CSS para padronização do botão controller do JSgrid */
 .btn-jsgrid-intranet{
   font-size: 0.7875rem;
-  margin-top: 4px
-  margin-left: 4px
+  margin-top: 4px;
+  margin-left: 4px;
 }
 
 .btn-jsgrid-intranet:hover{
@@ -86,7 +86,7 @@ label.error{
 }
 
 .btn-jsgrid-intranet.edit{
-  background: #17a2b8 linear-gradient(180deg, #3ab0c3, #17a2b8) repeat-x !important
+  background: #17a2b8 linear-gradient(180deg, #3ab0c3, #17a2b8) repeat-x !important;
 }
 
 .btn-jsgrid-intranet.delete{
