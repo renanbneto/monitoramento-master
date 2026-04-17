@@ -54,17 +54,25 @@ Route::group(['middleware' => ['local.auth','auth','auth2']],function (){
 
     Route::get('onibus', function () {
         $httpOptions = static function (): array {
-            $base = ['timeout' => 25, 'connect_timeout' => 10];
-            if (app()->environment('local')) {
-                return $base;
+            $cfg = config('transporte_urbs');
+            $base = [
+                'timeout' => $cfg['http']['timeout'],
+                'connect_timeout' => $cfg['http']['connect_timeout'],
+            ];
+            $useProxy = ! app()->environment('local') || ($cfg['proxy']['use_in_local'] ?? false);
+            $proxyUrl = $cfg['proxy']['url'] ?? null;
+            if ($useProxy && is_string($proxyUrl) && $proxyUrl !== '') {
+                return array_merge($base, ['proxy' => $proxyUrl]);
             }
-            $proxy = env('ONIBUS_HTTP_PROXY', 'http://proxy-02.pr.gov.br:8000');
 
-            return array_merge($base, ['proxy' => $proxy]);
+            return $base;
         };
 
         $fetchUrbs = static function (string $path) use ($httpOptions) {
-            $url = 'https://transporteservico.urbs.curitiba.pr.gov.br/'.$path.'?c=ea7b9';
+            $cfg = config('transporte_urbs');
+            $base = $cfg['base_url'];
+            $code = $cfg['access_code'];
+            $url = $base.'/'.$path.'?c='.urlencode((string) $code);
             $response = Http::withOptions($httpOptions())->get($url);
             if (! $response->successful()) {
                 return null;
@@ -79,14 +87,19 @@ Route::group(['middleware' => ['local.auth','auth','auth2']],function (){
         };
 
         try {
-            $registros = Cache::remember('onibus', 10, function () use ($fetchUrbs) {
-                $linhas = Cache::remember('linhas', 60 * 60, function () use ($fetchUrbs) {
-                    $data = $fetchUrbs('getLinhas.php');
+            $onibusTtl = max(1, (int) config('transporte_urbs.cache.onibus_ttl'));
+            $linhasTtl = max(1, (int) config('transporte_urbs.cache.linhas_ttl'));
+            $epLinhas = config('transporte_urbs.endpoints.linhas');
+            $epVeiculos = config('transporte_urbs.endpoints.veiculos');
+
+            $registros = Cache::remember('urbs_onibus', $onibusTtl, function () use ($fetchUrbs, $linhasTtl, $epLinhas, $epVeiculos) {
+                $linhas = Cache::remember('urbs_linhas', $linhasTtl, function () use ($fetchUrbs, $epLinhas) {
+                    $data = $fetchUrbs($epLinhas);
 
                     return is_array($data) ? $data : [];
                 });
 
-                $registros = $fetchUrbs('getVeiculos.php');
+                $registros = $fetchUrbs($epVeiculos);
                 if (! is_array($registros)) {
                     return [];
                 }
