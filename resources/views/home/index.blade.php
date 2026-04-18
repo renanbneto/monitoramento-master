@@ -453,14 +453,23 @@
 
         /* Remove espaços extras do AdminLTE nesta página */
         .content-wrapper {
+            min-height: 0 !important;
             padding-bottom: 0 !important;
-            min-height: unset !important;
         }
         .content-wrapper > .content {
             padding: 0 !important;
+            margin: 0 !important;
+        }
+        .content-wrapper > .content > .container-fluid,
+        .content-wrapper > .content > .container {
+            padding: 0 !important;
+            margin: 0 !important;
         }
         .content-header {
             display: none !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
     </style>
 @stop
