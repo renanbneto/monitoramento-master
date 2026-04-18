@@ -1481,6 +1481,7 @@ mapa.addLayer(onibusUrbs);
 
     <script>
         // ─── Mosaico Inline ───────────────────────────────────────────────
+        var camOffUrl = "{{ asset('images/camoff.png') }}";
 
         function adicionarCameraAoMosaico(camera) {
             if (!camera.link || camera.link === '#' || String(camera.link).trim() === '') {
@@ -1544,7 +1545,7 @@ mapa.addLayer(onibusUrbs);
                         '</button>' +
                     '</div>' +
                     '<img src="' + cam.link + '" alt="' + cam.local_nome + '" ' +
-                         'onerror="this.src=\'{{ asset(\'images/camoff.png\') }}\'">';
+                         'onerror="this.src=\'' + camOffUrl + '\'">';
                 container.appendChild(div);
             });
 
