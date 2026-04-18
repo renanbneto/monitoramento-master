@@ -8,9 +8,7 @@ use Spatie\QueryBuilder\AllowedFields;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Controllers\Controller;
 use App\Models\Cidade;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CameraController extends Controller
@@ -83,28 +81,6 @@ class CameraController extends Controller
         }
 
         return Camera::all();
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function mosaicos()
-    {
-        return User::select('mosaico')->find(Auth::user()->id);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function atualizaMosaicos()
-    {
-        return User::find(Auth::user()->id)->update([
-            "mosaico" => request()->input('mosaico') ?? '{}'
-        ]);
     }
 
     /**

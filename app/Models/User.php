@@ -75,4 +75,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function cameraMosaics()
+    {
+        return $this->hasMany(\App\Models\CameraMosaic::class);
+    }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\TipoController;
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\TelefoneController;
+use App\Http\Controllers\MosaicoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +40,11 @@ Route::group(['middleware' => ['local.auth', 'auth', 'auth2']], function () {
     Route::get('cidades', [CameraController::class, 'cidades'])->name('cidades');
     Route::get('cameras/view', [CameraController::class, 'view']);
     Route::get('cameras/status-json', [CameraController::class, 'statusJson'])->name('cameras.status-json');
-    Route::get('mosaicos', [CameraController::class, 'mosaicos'])->name('mosaicos');
-    Route::post('atualizaMosaicos', [CameraController::class, 'atualizaMosaicos'])->name('atualizaMosaicos');
+    Route::get('mosaicos', [MosaicoController::class, 'index'])->name('mosaicos.index');
+    Route::post('mosaicos', [MosaicoController::class, 'store'])->name('mosaicos.store');
+    Route::get('mosaicos/{mosaico}', [MosaicoController::class, 'show'])->name('mosaicos.show');
+    Route::put('mosaicos/{mosaico}', [MosaicoController::class, 'update'])->name('mosaicos.update');
+    Route::delete('mosaicos/{mosaico}', [MosaicoController::class, 'destroy'])->name('mosaicos.destroy');
     Route::resource('cameras', CameraController::class);
 
     Route::get('onibus', [OnibusController::class, 'index']);

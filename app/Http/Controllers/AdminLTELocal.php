@@ -35,6 +35,12 @@ class AdminLTELocal
                 'can'         =>  ['Administrador']
             ],
             [
+                'text'        => 'Mosaicos',
+                'url'         => '/mosaicos',
+                'icon'        => 'fas fa-th-large',
+                'can'         =>  ['Administrador']
+            ],
+            [
                 'text'        => 'Cadastrar Câmera', // Link para monitoramento de serviços
                 'url'         => '/cameras/create',
                 'icon'        => 'fas fa-camera',
