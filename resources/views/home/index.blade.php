@@ -450,6 +450,18 @@
             padding: 10px;
             z-index: 10000;
         }
+
+        /* Remove espaços extras do AdminLTE nesta página */
+        .content-wrapper {
+            padding-bottom: 0 !important;
+            min-height: unset !important;
+        }
+        .content-wrapper > .content {
+            padding: 0 !important;
+        }
+        .content-header {
+            display: none !important;
+        }
     </style>
 @stop
 
