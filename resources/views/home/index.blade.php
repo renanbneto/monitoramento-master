@@ -376,7 +376,7 @@
         }
  */
         #mapa {
-            height: 60vh;
+            height: 93vh;
             width: 100%;
         }
 
