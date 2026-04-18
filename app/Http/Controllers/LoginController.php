@@ -67,7 +67,7 @@ class LoginController extends Controller
                 ]
             ],
             ['chamadaSistema' => true]);
-            return $opmNome[0]['opms_subordinadas'];
+            return $this->opmsSubordinadasFromListarUnidadesResponse($opmNome);
         });
 
         $decoded->notificacao_obrigatoria = 0;
@@ -361,7 +361,7 @@ class LoginController extends Controller
             ],
             ['chamadaSistema' => true]);
 
-            return $opmNome[0]['opms_subordinadas'];
+            return $this->opmsSubordinadasFromListarUnidadesResponse($opmNome);
         });
 
         $decoded->notificacao_obrigatoria = 0;
@@ -406,5 +406,44 @@ class LoginController extends Controller
 
 
 
+    }
+
+    /**
+     * Extrai "opms_subordinadas" do retorno de /api/listarUnidadesMeta4.
+     * A API pode devolver lista de objetos, objeto único ou formatos legados; em falha retorna array vazio.
+     *
+     * @param  mixed  $response
+     */
+    private function opmsSubordinadasFromListarUnidadesResponse($response): array
+    {
+        if (! is_array($response)) {
+            return [];
+        }
+        if (array_key_exists('opms_subordinadas', $response)) {
+            return $this->normalizeOpmsSubordinadasValue($response['opms_subordinadas']);
+        }
+        $first = $response[0] ?? null;
+        if (is_array($first) && array_key_exists('opms_subordinadas', $first)) {
+            return $this->normalizeOpmsSubordinadasValue($first['opms_subordinadas']);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  mixed  $value
+     */
+    private function normalizeOpmsSubordinadasValue($value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+        if (is_string($value) && $value !== '') {
+            $decoded = json_decode($value, true);
+
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return [];
     }
 }

@@ -63,7 +63,6 @@
                     @else
                     <a href="/cameras/{{$camera->id}}/edit" title="Desabilitada" class="btn btn-danger btn-sm"><i class="fas fa-toggle-off"></i></a>
                     @endif
-                    <a href="/cameras/{{$camera->id}}/edit" data-camera="{{json_encode($camera)}}" onclick="-+-" title="Adicionar ao mosaico" class="btn btn-secondary btn-sm"><i class="fas fa-th"></i></a>
                     <a href="/cameras/{{$camera->id}}/edit" title="Mostrar no mapa" class="btn btn-light btn-sm"><i class="fas fa-map"></i></a>
                 </td>
             </tr>
@@ -83,39 +82,21 @@
 <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
 
 <script>
-var mosaicos = { m1:[], m2:[], m3:[], m4:[], m5:[], m6:[], m7:[], m8:[], m9:[], m10:[] };
-
-$.ajax({
-    url: '{{ route('mosaicos') }}',
-    success: function(data) {
-        var mosaicosBanco = JSON.parse(data.mosaico);
-        for (var i = 1; i <= 10; i++) {
-            if (!mosaicosBanco.hasOwnProperty('m' + i)) mosaicosBanco['m' + i] = [];
-        }
-        mosaicos = mosaicosBanco;
-        localStorage.setItem('mosaicos', JSON.stringify(mosaicosBanco));
-    }
-});
-
-function updateMosaicos() {
-    $.ajax({
-        url: '{{ route('atualizaMosaicos') }}',
-        method: 'POST',
-        data: { mosaico: JSON.stringify(mosaicos) },
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-    });
-}
-
 function refreshCameraStatus() {
     $.getJSON('{{ route('cameras.status-json') }}', function(data) {
         var online = 0, offline = 0, unknown = 0;
 
         $('[data-camera-id]').each(function() {
             var id = $(this).data('camera-id');
+            var row = data[id] != null ? data[id] : data[String(id)];
             var badge = $(this).find('.status-badge');
-            if (!data[id]) return;
+            if (!row) {
+                badge.removeClass('badge-success badge-danger badge-secondary').addClass('badge-secondary').text('Desconhecido');
+                unknown++;
+                return;
+            }
 
-            var s = data[id].status;
+            var s = row.status;
             badge.removeClass('badge-success badge-danger badge-secondary');
 
             if (s === 'online') {
@@ -129,8 +110,8 @@ function refreshCameraStatus() {
                 unknown++;
             }
 
-            if (data[id].checked_at) {
-                badge.attr('title', 'Verificado: ' + new Date(data[id].checked_at).toLocaleString('pt-BR'));
+            if (row.checked_at) {
+                badge.attr('title', 'Verificado: ' + new Date(row.checked_at).toLocaleString('pt-BR'));
             }
         });
 

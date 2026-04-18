@@ -110,193 +110,9 @@
         </div>
     </div>
 
-    <div id="mySidepanelRight" class="sidepanel sidepanel-right tabs-right" aria-label="side panel" aria-hidden="false">
-        <div class="sidepanel-inner-wrapper">
-            <nav class="sidepanel-tabs-wrapper" aria-label="sidepanel tab navigation">
-                <ul class="sidepanel-tabs">
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-1">
-                            <i class="fas fa-th"></i>&nbsp;<span>1</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-2">
-                            <i class="fas fa-th"></i>&nbsp;<span>2</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-3">
-                            <i class="fas fa-th"></i>&nbsp;<span>3</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-4">
-                            <i class="fas fa-th"></i>&nbsp;<span>4</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-5">
-                            <i class="fas fa-th"></i>&nbsp;<span>5</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-6">
-                            <i class="fas fa-th"></i>&nbsp;<span>6</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-7">
-                            <i class="fas fa-th"></i>&nbsp;<span>7</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-8">
-                            <i class="fas fa-th"></i>&nbsp;<span>8</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-9">
-                            <i class="fas fa-th"></i>&nbsp;<span>9</span>
-                        </a>
-                    </li>
-
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-10">
-                            <i class="fas fa-th"></i>&nbsp;<span>10</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </nav>
-            <div class="sidepanel-content-wrapper">
-                <div class="sidepanel-content">
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-1" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">
-                            <span>Camera 01</span>
-                            <i style="float: right;margin-right: 5px;margin-top: 5px;" class="fas fa-times-circle" onclick="alert('Remover do mosaico')"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-2" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-3" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-4" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-5" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-6" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-7" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-8" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-9" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                    <div class="sidepanel-tab-content tabMosaicos" data-tab-content="tab-10" style="width: 100%;height: 100%;">
-                        <div style="width: 100%;height: 100%;display:flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around !important;">
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 1</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                            <div class="" style="margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">Camera 2</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="sidepanel-toggle-container">
-            <button class="sidepanel-toggle-button" type="button" aria-label="toggle side panel"></button>
-        </div>
-    </div>
 
 </div>
+
 @stop
 
 @section('css')
@@ -306,6 +122,7 @@
     <link rel="stylesheet" href="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.css')}}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="{{ asset('vendor/select2/dist/css/select2.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <style>
 
 .custom-select {
@@ -364,10 +181,6 @@
             width: 90%;
         }
 
-        #mySidepanelRight {
-            width: 90%;
-        }
-
         .marker-context-menu {
             display: none;
             position: absolute;
@@ -375,6 +188,27 @@
             border: solid 1px #d4d4d4;
             padding: 10px;
             z-index: 10000;
+        }
+
+        /* Remove espaços extras do AdminLTE nesta página */
+        .content-wrapper {
+            min-height: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .content-wrapper > .content {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .content-wrapper > .content > .container-fluid,
+        .content-wrapper > .content > .container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .content-header {
+            display: none !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
     </style>
 @stop
@@ -386,252 +220,13 @@
 <script src="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.min.js')}}"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
 <script>
-    
+
 
     var tracker;
     var layersCameras = L.layerGroup();
-
-var mosaicos = {
-        m1:[],
-        m2:[],
-        m3:[],
-        m4:[],
-        m5:[],
-        m6:[],
-        m7:[],
-        m8:[],
-        m9:[],
-        m10:[]
-    };
-
-$.ajax({
-    url:'{{route('mosaicos')}}',
-    success: function(data) {
-        try {
-            var raw = (data && data.mosaico != null) ? data.mosaico : '{}';
-            if (typeof raw !== 'string') {
-                raw = JSON.stringify(raw);
-            }
-            mosaicosBanco = JSON.parse(raw || '{}');
-        } catch (e) {
-            mosaicosBanco = {};
-        }
-        if (!mosaicosBanco || typeof mosaicosBanco !== 'object') {
-            mosaicosBanco = {};
-        }
-
-        for (let index = 1; index <= 10; index++) {
-
-            if (!mosaicosBanco.hasOwnProperty(`m${index}`)) {
-               mosaicosBanco[`m${index}`] = [];
-            }
-
-        }
-
-        mosaicos = mosaicosBanco;
-
-        try {
-            localStorage.setItem('mosaicos', JSON.stringify(mosaicosBanco));
-        } catch (e) {
-            /* Tracking Prevention / modo privado pode bloquear storage */
-        }
-    },
-    error: function () {
-        mosaicosBanco = {};
-        for (let index = 1; index <= 10; index++) {
-            mosaicosBanco['m' + index] = [];
-        }
-        mosaicos = mosaicosBanco;
-    }
-});
-
-function showAddMosaicoView(el){
-    camera = JSON.parse(atob($(el).data().camera))
-
-    corpo = `<div class="d-flex flex-wrap justify-content-around">
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link active" role="tab" data-mosaico="m1" data-tab-link="tab-1">
-        <i class="fas fa-th"></i>&nbsp;<span>1</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m2" data-tab-link="tab-2">
-        <i class="fas fa-th"></i>&nbsp;<span>2</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m3" data-tab-link="tab-3">
-        <i class="fas fa-th"></i>&nbsp;<span>3</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m4" data-tab-link="tab-4">
-        <i class="fas fa-th"></i>&nbsp;<span>4</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m5" data-tab-link="tab-5">
-        <i class="fas fa-th"></i>&nbsp;<span>5</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m6" data-tab-link="tab-6">
-        <i class="fas fa-th"></i>&nbsp;<span>6</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m7" data-tab-link="tab-7">
-        <i class="fas fa-th"></i>&nbsp;<span>7</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m8" data-tab-link="tab-8">
-        <i class="fas fa-th"></i>&nbsp;<span>8</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m9" data-tab-link="tab-9">
-        <i class="fas fa-th"></i>&nbsp;<span>9</span>
-    </a>
-</div>
-
-<div class="sidepanel-tab">
-    <a href="#" class="sidebar-tab-link" role="tab" data-mosaico="m10" data-tab-link="tab-10">
-        <i class="fas fa-th"></i>&nbsp;<span>10</span>
-    </a>
-</div></div>`;
-    Swal.fire({
-        width: '50%',
-        title: "Selecione o mosaico para adicionar a câmera",
-        html:corpo,
-        showDenyButton: false,
-        showConfirmButton: false,
-        showCancelButton: true,
-        confirmButtonText: "Adicionar",
-        cancelButtonText: `Cancelar`,
-        willOpen: () =>{
-            $('.sidepanel-tab a').click(function(){
-                addToMosaico($(this).data().mosaico,camera)
-                Swal.close();
-            });
-        },
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-            Swal.fire("Adicionada!", "", "success");
-        }
-    });
-
-    console.log(camera)
-}
-
-function updateMosaicos(){
-    $.ajax({
-    url:'{{route('atualizaMosaicos')}}',
-    method:'POST',
-    data:{mosaico:JSON.stringify(mosaicos)},
-    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    success: function(data) {
-        console.log("Mosaicos atualizados no perfil do usuário!");
-    },
-    error: function(){
-        console.log("Erro ao atualizar os mosaicos no perfil do usuário!");
-    }
-});
-}
-
-function refreshMosaicos(){
-
-    for (let index = 1; index <= 10; index++) {
-
-        // Seleciona a div correspondente
-        let divMosaicoAtual = $('[data-tab-content="tab-' + index + '"].tabMosaicos > div')
-
-        //Limpar view do mosaico index
-        $(divMosaicoAtual).html('')
-
-        //Iterar pela view do mosaico index carregando na tela sem ativar o source
-
-        mosaicos["m"+index].forEach(camera => {
-
-            $(divMosaicoAtual).append(`
-            <div class="" style="display:flex;flex-flow:column;margin-bottom: 10px; margin-right: 10px;min-width: 300px;min-height:200px;color:white;background-color:black;">
-                <div>
-                <span>${camera.camera} - ${camera.cidade}</span>
-                <i style="float: right;margin-right: 5px;margin-top: 5px;" class="fas fa-times-circle" onclick="removeFromMosaico('m${index}','${camera.id}')"></i>
-                </div>
-                <img src="${camera.link}"></img>
-            </div>
-            `);
-
-        });
-
-
-    }
-
-}
-
-function removeFromMosaico(mosaico,id){
-    mosaicos[mosaico] = mosaicos[mosaico].filter(item => item.id != id);
-    localStorage.setItem('mosaicos', JSON.stringify(mosaicosBanco));
-    updateMosaicos();
-    refreshMosaicos();
-}
-
-function addToMosaico(mosaico,camera){
-    mosaicos[mosaico].push(camera);
-    localStorage.setItem('mosaicos', JSON.stringify(mosaicosBanco));
-    updateMosaicos();
-    refreshMosaicos();
-}
-
-function telaCheia(el) {
-
-  if (el.requestFullscreen) {
-    el.requestFullscreen();
-  } else if (el.mozRequestFullScreen) { /* Firefox */
-    el.mozRequestFullScreen();
-  } else if (el.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-    el.webkitRequestFullscreen();
-  } else if (el.msRequestFullscreen) { /* IE/Edge */
-    el.msRequestFullscreen();
-  }
-
-}
-
-
-$(document).ready(function(){
-
-    $(".sidepanel-toggle-button").click(refreshMosaicos);
-
-    $('.sidebar-tab-link').on('dblclick',function(){
-
-        var div = document.getElementById('mySidepanelRight');
-
-        if (div.requestFullscreen) {
-            div.requestFullscreen();
-        } else if (div.mozRequestFullScreen) { /* Firefox */
-            div.mozRequestFullScreen();
-        } else if (div.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-            div.webkitRequestFullscreen();
-        } else if (div.msRequestFullscreen) { /* IE/Edge */
-            div.msRequestFullscreen();
-        }
-
-    });
-});
-
 
 // RASTREAMENTO
 // Variáveis de controle
@@ -1081,7 +676,6 @@ mapa.on('overlayremove', function (event) {
                 $('#mapa').append(`<div class="marker-context-menu" id="markerMenu" style="left: ${event.originalEvent.pageX-230}px;top: ${event.originalEvent.pageY-60}px;display:block;">
                     <ul>
                     @if ($Autorizacao->can(['Administrador']))
-                        <li><a href="#action1">Abrir mosaico desta região</a></li>
                         <li><a href="/cameras/create?lat=${event.latlng.lat}&lng=${event.latlng.lng}">Cadastrar camera nesta posição</a></li>
                     @endif
                     </ul>
@@ -1093,15 +687,6 @@ mapa.on('overlayremove', function (event) {
 
             const panelLeft = L.control.sidepanel('mySidepanelLeft', {
                 panelPosition: 'left',
-                hasTabs: true,
-                tabsPosition: 'top',
-                pushControls: true,
-                darkMode: false,
-                startTab: 'tab-1'
-            }).addTo(mapa);
-
-            const panelRight = L.control.sidepanel('mySidepanelRight', {
-                panelPosition: 'right',
                 hasTabs: true,
                 tabsPosition: 'top',
                 pushControls: true,
@@ -1293,35 +878,10 @@ mapa.addLayer(onibusUrbs);
                 }],
                 icon: camIcon,
                 rotationAngle: 0
-            }).on('click',function(){
-
-                var streamUrl = obj.link;
-                if (!streamUrl || streamUrl === '#' || String(streamUrl).trim() === '') {
-                    return;
-                }
-
-                layersCameras.removeLayer(marker)
-
-                var bounds = L.latLngBounds(getCameraPoits([parseFloat(obj.lat),parseFloat(obj.lng)]));
-
-                var overlay = new L.imageOverlay(streamUrl, bounds,{
-                    opacity: 1,
-                    interactive: true,
-                    position: 'front',
-                    zIndex: '9999 !important'
-                }).addTo(mapa);
-
-                overlay.bringToFront();
-
-                L.DomEvent.on(overlay._image, 'dblclick', function(e) {
-                    mapa.removeLayer(overlay)
-                    overlay._image.src = '#'
-                    layersCameras.addLayer(marker)
-                    return
-
-                })
-
-            }).on('contextmenu', function(event){
+            }).bindPopup(
+                `<strong>${obj.camera}</strong><br>${obj.cidade}<br>` +
+                `<a href="{{ url('/mosaicos') }}?add_id=${obj.id}">Incluir em um mosaico</a>`
+            ).on('contextmenu', function(event){
 
 
                 $('.marker-context-menu').remove(); // Remove anteriores
@@ -1334,7 +894,7 @@ mapa.addLayer(onibusUrbs);
                             <li><a href="/cameras/${obj.id}/edit">Editar</a></li>
                             <li><a href="#action2">Habilitar/Desabilitar</a></li>
                         @endif
-                        <li><a data-camera="${btoa(JSON.stringify(obj))}" onclick="showAddMosaicoView(this);" href="#">Adicionar ao mosaico</a></li>
+                        <li><a href="{{ url('/mosaicos') }}?add_id=${obj.id}">Mosaicos — adicionar câmera</a></li>
                     </ul>
                     <span>Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}</span>
                 </div>`);
@@ -1344,6 +904,7 @@ mapa.addLayer(onibusUrbs);
             })
             .setRotationOrigin('center');
 
+            marker.cameraData = obj;
             layersCameras.addLayer(marker)
 
         }
