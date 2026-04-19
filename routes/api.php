@@ -1,11 +1,28 @@
 <?php
 
+use App\Http\Controllers\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
+
+/*
+|--------------------------------------------------------------------------
+| Webhooks — autenticação HMAC-SHA256 via middleware webhook.hmac
+|--------------------------------------------------------------------------
+| Header obrigatório: X-Signature-256: hash_hmac('sha256', $body, $secret)
+| Header opcional:    X-Timestamp: unix timestamp (proteção anti-replay ±5min)
+*/
+Route::prefix('webhooks')->group(function () {
+    Route::post('viaturas',    [WebhookController::class, 'viaturas'])->middleware('webhook.hmac:viaturas');
+    Route::post('radios',      [WebhookController::class, 'radios'])->middleware('webhook.hmac:radios');
+    Route::post('ocorrencias', [WebhookController::class, 'ocorrencias'])->middleware('webhook.hmac:ocorrencias');
+    Route::post('panico/mpf',  [WebhookController::class, 'panico'])->middleware('webhook.hmac:panico_mpf')->defaults('tipo', 'mpf');
+    Route::post('panico/escola', [WebhookController::class, 'panico'])->middleware('webhook.hmac:panico_escola')->defaults('tipo', 'escola');
+    Route::post('lpr',         [WebhookController::class, 'lpr'])->middleware('webhook.hmac:lpr');
+});
 
 
 /*
