@@ -3,6 +3,7 @@
 use App\Http\Controllers\AtalhoController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\MosaicoController;
 use App\Http\Controllers\OnibusController;
 use App\Http\Controllers\ProspeccaoLPRController;
 use Illuminate\Support\Facades\Route;
@@ -46,4 +47,6 @@ Route::group(['middleware' => ['local.auth', 'auth', 'auth2']], function () {
     Route::get('onibus', [OnibusController::class, 'index']);
 
     Route::resource('eventos', EventoController::class);
+
+    Route::resource('mosaicos', MosaicoController::class);
 });
