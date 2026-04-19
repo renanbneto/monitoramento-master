@@ -56,6 +56,11 @@ class AdminLTELocal
                 'url'         => '/eventos',
                 'icon'        => 'fas fa-calendar-alt',
             ],
+            [
+                'text'        => 'Mosaicos',
+                'url'         => '/mosaicos',
+                'icon'        => 'fas fa-th-large',
+            ],
         ];
     }
 

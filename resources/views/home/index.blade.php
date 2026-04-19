@@ -122,7 +122,6 @@
     <link rel="stylesheet" href="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.css')}}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="{{ asset('vendor/select2/dist/css/select2.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <style>
 
 .custom-select {
@@ -220,10 +219,8 @@
 <script src="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.min.js')}}"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
 <script>
-
 
     var tracker;
     var layersCameras = L.layerGroup();
@@ -238,7 +235,7 @@ const maxTrackingTime = 5 * 60 * 1000; // 5 minutos em milissegundos
 function startTracking(veiculo) {
     let marker = veiculosDataFetcher.markers[veiculo];
     markerLatLng = marker.getLatLng();
-    mapa.setView(markerLatLng, 30); // Altera o zoom e centraliza no marker
+    mapa.setView(markerLatLng, 18); // Altera o zoom e centraliza no marker
     marker.openPopup();
     
     
@@ -249,7 +246,7 @@ function startTracking(veiculo) {
 
         // Reposiciona o zoom e a visualização para as coordenadas atuais do marker
         const markerLatLng = marker.getLatLng();
-        mapa.setView(markerLatLng, 30); // Altera o zoom e centraliza no marker
+        mapa.setView(markerLatLng, 18); // Altera o zoom e centraliza no marker
         // Abre o popup se ele não estiver visível
         if (!marker.getPopup().isOpen()) {
                     marker.openPopup();
@@ -696,7 +693,7 @@ mapa.on('overlayremove', function (event) {
 
             const veiculosDataFetcher = {
   url: '/onibus',
-  intervalo: 10000, // 1 minuto em milissegundos
+  intervalo: 10000, // 10 segundos
   veiculos: {}, // Objeto para armazenar os dados dos veículos
   markers: {}, // Objeto para armazenar os marcadores dos veículos no mapa
 
@@ -754,6 +751,15 @@ busIconatrasado: L.icon({
     if (!data || typeof data !== 'object' || Array.isArray(data)) {
       return;
     }
+
+    // Remove marcadores de veículos que não estão mais na resposta
+    Object.keys(this.markers).forEach(cod => {
+      if (!data[cod]) {
+        onibusUrbs.removeLayer(this.markers[cod]);
+        delete this.markers[cod];
+      }
+    });
+
     this.veiculos = data;
 
     Object.keys(this.veiculos).forEach(cod => {
@@ -767,17 +773,9 @@ busIconatrasado: L.icon({
         return;
       }
 
-      if (this.markers[cod]) {
-        this.markers[cod].setLatLng([lat, lon]);
-      } else {
-        var st = veiculo.STATUS || 'desconhecido';
-        var iconM = this['busIcon' + st] || this.busIcondesconhecido;
-        this.markers[cod] = L.marker([lat, lon],{ 
-            icon: iconM,
-            categoria: veiculo.CATEGORIA_LINHA || 'RECOLHENDO',
-            linha: veiculo.NOME_LINHA || 'RECOLHENDO',
-         }).addTo(onibusUrbs)
-          .bindPopup(`
+      var st = veiculo.STATUS || 'desconhecido';
+      var iconM = this['busIcon' + st] || this.busIcondesconhecido;
+      var popupContent = `
           <b>Veículo:</b>${veiculo.CATEGORIA_LINHA || 'RECOLHENDO'} - ${veiculo.COD}<br>
           <b>Cor:</b>${veiculo.COR_LINHA || 'RECOLHENDO'}<br>
           <b>Linha:</b> ${veiculo.NOME_LINHA || 'RECOLHENDO'} - ${veiculo.CODIGOLINHA}<br>
@@ -785,9 +783,21 @@ busIconatrasado: L.icon({
           <b>Última atualização:</b> ${veiculo.REFRESH}<br>
           <b>Situação:</b> ${veiculo.SITUACAO2}<br>
           <b>Status:</b> ${veiculo.STATUS}<br>
-          <b><a class="" onclick="javascript:mapa.setZoom(18);startTracking('${veiculo.COD}')">Rastrear este ônibus</a></b><br>
-          <b><a class="" onclick="javascript:stopTracking();mapa.setZoom(16)">Parar rastreamento</a></b>
-          `);
+          <b><a class="" onclick="startTracking('${veiculo.COD}')">Rastrear este ônibus</a></b><br>
+          <b><a class="" onclick="stopTracking()">Parar rastreamento</a></b>
+          `;
+
+      if (this.markers[cod]) {
+        this.markers[cod].setLatLng([lat, lon]);
+        this.markers[cod].setIcon(iconM);
+        this.markers[cod].setPopupContent(popupContent);
+      } else {
+        this.markers[cod] = L.marker([lat, lon], {
+            icon: iconM,
+            categoria: veiculo.CATEGORIA_LINHA || 'RECOLHENDO',
+            linha: veiculo.NOME_LINHA || 'RECOLHENDO',
+         }).addTo(onibusUrbs)
+          .bindPopup(popupContent);
       }
     });
   },
@@ -881,7 +891,33 @@ mapa.addLayer(onibusUrbs);
             }).bindPopup(
                 `<strong>${obj.camera}</strong><br>${obj.cidade}<br>` +
                 `<a href="{{ url('/mosaicos') }}?add_id=${obj.id}">Incluir em um mosaico</a>`
-            ).on('contextmenu', function(event){
+            ).on('click', function(){
+
+                var streamUrl = obj.link;
+                if (!streamUrl || streamUrl === '#' || String(streamUrl).trim() === '') {
+                    return;
+                }
+
+                layersCameras.removeLayer(marker);
+
+                var bounds = L.latLngBounds(getCameraPoits([parseFloat(obj.lat), parseFloat(obj.lng)]));
+
+                var overlay = new L.imageOverlay(streamUrl, bounds, {
+                    opacity: 1,
+                    interactive: true,
+                    position: 'front',
+                    zIndex: '9999 !important'
+                }).addTo(mapa);
+
+                overlay.bringToFront();
+
+                L.DomEvent.on(overlay._image, 'dblclick', function () {
+                    mapa.removeLayer(overlay);
+                    overlay._image.src = '#';
+                    layersCameras.addLayer(marker);
+                });
+
+            }).on('contextmenu', function(event){
 
 
                 $('.marker-context-menu').remove(); // Remove anteriores
