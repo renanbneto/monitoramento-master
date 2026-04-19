@@ -30,6 +30,8 @@ return [
     'http' => [
         'timeout' => (float) env('URBS_TRANSPORTE_HTTP_TIMEOUT', 25),
         'connect_timeout' => (float) env('URBS_TRANSPORTE_HTTP_CONNECT_TIMEOUT', 10),
+        // Em ambientes com proxy corporativo que faz inspeção SSL, definir como false
+        'verify' => filter_var(env('URBS_TRANSPORTE_SSL_VERIFY', true), FILTER_VALIDATE_BOOLEAN),
     ],
 
     'proxy' => [

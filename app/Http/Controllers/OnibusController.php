@@ -13,8 +13,9 @@ class OnibusController extends Controller
         $httpOptions = static function (): array {
             $cfg = config('transporte_urbs');
             $base = [
-                'timeout' => $cfg['http']['timeout'],
+                'timeout'         => $cfg['http']['timeout'],
                 'connect_timeout' => $cfg['http']['connect_timeout'],
+                'verify'          => $cfg['http']['verify'] ?? true,
             ];
             $useProxy = ! app()->environment('local') || ($cfg['proxy']['use_in_local'] ?? false);
             $proxyUrl = $cfg['proxy']['url'] ?? null;
@@ -36,7 +37,9 @@ class OnibusController extends Controller
             if (is_array($json)) {
                 return $json;
             }
-            $decoded = json_decode($response->body(), true);
+            // Fallback: a URBS pode responder em ISO-8859-1
+            $body = mb_convert_encoding($response->body(), 'UTF-8', 'ISO-8859-1');
+            $decoded = json_decode($body, true);
 
             return is_array($decoded) ? $decoded : null;
         };

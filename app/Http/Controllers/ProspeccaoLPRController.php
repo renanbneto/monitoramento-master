@@ -5,61 +5,46 @@ namespace App\Http\Controllers;
 use App\Models\ProspeccaoLPR;
 use App\Support\Audit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class ProspeccaoLPRController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-
         if (request()->ajax()) {
             return datatables()->of(ProspeccaoLPR::query())
                 ->addColumn('acoes', function ($row) {
-                    $deleteBtn = '<button class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '" onclick="excluirCamera(this)">Excluir</button>';
-                    return $deleteBtn;
+                    $id = (int) $row->id;
+                    return '<button class="btn btn-sm btn-danger delete-btn" data-id="' . $id . '" onclick="excluirCamera(this)">Excluir</button>';
                 })
                 ->rawColumns(['acoes'])
                 ->make(true);
         }
 
-        return view("monitoramento.prospeccaoLPR.index");
+        return view('monitoramento.prospeccaoLPR.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nome' => 'required',
-            'cidade' => 'required',
-            'bairro' => 'required',
-            'endereco' => 'required',
-            'sentido' => 'required',
-            'lat' => 'required',
-            'lng' => 'required',
+            'nome'     => 'required|string|max:255',
+            'cidade'   => 'required|string|max:150',
+            'bairro'   => 'required|string|max:150',
+            'endereco' => 'required|string|max:255',
+            'sentido'  => 'required|string|max:100',
+            'lat'      => 'required|numeric|between:-90,90',
+            'lng'      => 'required|numeric|between:-180,180',
         ]);
 
-        $validated['cadastrada_por'] = session()->get('user')->nome ?? null;
-        $validated['cadastrada_por_cpf'] = session()->get('user')->cpf ?? null;
-        $validated['user_id'] = session()->get('user')->id ?? null;
+        $validated['cadastrada_por']     = session()->get('user')->nome ?? null;
+        $validated['cadastrada_por_cpf'] = session()->get('user')->cpf  ?? null;
+        $validated['user_id']            = session()->get('user')->id   ?? null;
 
         try {
             $prospeccao = ProspeccaoLPR::create($validated);
@@ -69,57 +54,68 @@ class ProspeccaoLPRController extends Controller
             ]);
             return response()->json(['success' => true, 'data' => $prospeccao], 201);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Erro ao cadastrar', 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Erro ao cadastrar.'], 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ProspeccaoLPR  $prospeccaoLPR
-     * @return \Illuminate\Http\Response
-     */
     public function show(ProspeccaoLPR $prospeccaoLPR)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ProspeccaoLPR  $prospeccaoLPR
-     * @return \Illuminate\Http\Response
-     */
     public function edit(ProspeccaoLPR $prospeccaoLPR)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProspeccaoLPR  $prospeccaoLPR
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, ProspeccaoLPR $prospeccaoLPR)
     {
-        //
+        $this->autorizarModificacao($prospeccaoLPR);
+
+        $validated = $request->validate([
+            'nome'     => 'required|string|max:255',
+            'cidade'   => 'required|string|max:150',
+            'bairro'   => 'required|string|max:150',
+            'endereco' => 'required|string|max:255',
+            'sentido'  => 'required|string|max:100',
+            'lat'      => 'required|numeric|between:-90,90',
+            'lng'      => 'required|numeric|between:-180,180',
+        ]);
+
+        try {
+            $prospeccaoLPR->update($validated);
+            Audit::log('lpr.update', 'ProspeccaoLPR', $prospeccaoLPR->id, [
+                'nome'     => $validated['nome'],
+                'endereco' => $validated['endereco'],
+            ]);
+            return response()->json(['success' => true, 'data' => $prospeccaoLPR]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Erro ao atualizar.'], 500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
+        $prospeccaoLPR = ProspeccaoLPR::findOrFail($id);
+        $this->autorizarModificacao($prospeccaoLPR);
+
         try {
-            ProspeccaoLPR::destroy($id);
+            $prospeccaoLPR->delete();
+            Audit::log('lpr.delete', 'ProspeccaoLPR', $prospeccaoLPR->id);
             return response()->json(['success' => true, 'message' => 'Registro excluído com sucesso.']);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Erro ao excluir o registro.', 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Erro ao excluir o registro.'], 500);
+        }
+    }
+
+    private function autorizarModificacao(ProspeccaoLPR $prospeccaoLPR): void
+    {
+        $isAdmin  = Str::of(Session::get('autorizacoes', ''))->contains('Administrador');
+        $userId   = session()->get('user')->id ?? null;
+        $isOwner  = $userId !== null && $prospeccaoLPR->user_id === $userId;
+
+        if (! $isAdmin && ! $isOwner) {
+            abort(403, 'Sem permissão para modificar este registro.');
         }
     }
 }
