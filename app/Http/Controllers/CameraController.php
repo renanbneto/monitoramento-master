@@ -52,15 +52,25 @@ class CameraController extends Controller
     public function statusJson()
     {
         $cameras = Camera::select('id', 'status', 'status_checked_at', 'status_response_ms')->get();
-        $result = [];
+        $result  = [];
+        $online  = 0;
+        $offline = 0;
+
         foreach ($cameras as $camera) {
+            $st = $camera->status ?? 'unknown';
+            if ($st === 'online')  $online++;
+            if ($st === 'offline') $offline++;
             $result[$camera->id] = [
-                'status'      => $camera->status ?? 'unknown',
+                'status'      => $st,
                 'checked_at'  => $camera->status_checked_at?->toISOString(),
                 'response_ms' => $camera->status_response_ms,
             ];
         }
-        return response()->json($result);
+
+        return response()->json([
+            'summary' => ['online' => $online, 'offline' => $offline, 'total' => $cameras->count()],
+            'cameras' => $result,
+        ]);
     }
 
     /**

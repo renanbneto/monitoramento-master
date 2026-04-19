@@ -47,6 +47,7 @@ Route::group(['middleware' => ['local.auth', 'auth', 'auth2']], function () {
     Route::get('onibus', [OnibusController::class, 'index']);
 
     Route::resource('eventos', EventoController::class);
+    Route::get('eventos-count', [EventoController::class, 'count'])->name('eventos.count');
 
     Route::resource('mosaicos', MosaicoController::class);
 });
