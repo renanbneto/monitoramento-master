@@ -52,7 +52,7 @@
     </div>
 
     {{-- Painel esquerdo — Alertas e informações operacionais (#15) --}}
-    <div id="mySidepanelLeft" class="sidepanel sidepanel-left tabs-left d-none" aria-label="side panel" aria-hidden="false">
+    <div id="mySidepanelLeft" class="sidepanel sidepanel-left tabs-left" aria-label="side panel" aria-hidden="false">
         <div class="sidepanel-inner-wrapper">
             <nav class="sidepanel-tabs-wrapper" aria-label="sidepanel tab navigation">
                 <ul class="sidepanel-tabs">
@@ -66,9 +66,14 @@
                             <i class="fas fa-video fa-lg"></i>
                         </a>
                     </li>
-                    <li class="sidepanel-tab" title="Prospecções LPR recentes">
+                    <li class="sidepanel-tab" title="Prospecções LPR">
                         <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-3">
                             <i class="fas fa-search-location fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="sidepanel-tab" title="Alertas sonoros">
+                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-4">
+                            <i class="fas fa-volume-up fa-lg"></i>
                         </a>
                     </li>
                 </ul>
@@ -108,6 +113,47 @@
                         <p class="text-muted mt-2" style="font-size:12px;">
                             Acesse <a href="/prospeccoesLPR">a página de LPR</a> para consultas e cadastros.
                         </p>
+                    </div>
+
+                    {{-- Tab 4: Alertas sonoros (#17) --}}
+                    <div class="sidepanel-tab-content" data-tab-content="tab-4" style="padding:10px;">
+                        <strong style="font-size:13px;"><i class="fas fa-volume-up mr-1 text-success"></i>Alertas Sonoros</strong>
+                        <p class="text-muted mt-1 mb-3" style="font-size:11px;">
+                            O sistema verifica novos eventos periodicamente e emite um sinal sonoro quando detecta mudanças.
+                        </p>
+
+                        <div class="form-group mb-2">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="som-novos-eventos" checked>
+                                <label class="custom-control-label" for="som-novos-eventos" style="font-size:12px;">
+                                    Novo grande evento
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-2">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="som-camera-offline">
+                                <label class="custom-control-label" for="som-camera-offline" style="font-size:12px;">
+                                    Câmera ficou offline
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label style="font-size:12px;">Volume</label>
+                            <input type="range" class="form-control-range" id="som-volume" min="0" max="1" step="0.1" value="0.5">
+                        </div>
+
+                        <button class="btn btn-sm btn-outline-success mt-2" onclick="tocarAlerta('evento')">
+                            <i class="fas fa-play mr-1"></i>Testar som — evento
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger mt-2" onclick="tocarAlerta('offline')">
+                            <i class="fas fa-play mr-1"></i>Testar som — offline
+                        </button>
+
+                        <div class="mt-3 text-muted" style="font-size:11px;" id="ultimo-alerta-sonoro">
+                            Nenhum alerta emitido ainda.
+                        </div>
                     </div>
 
                 </div>
@@ -384,6 +430,16 @@
 }
 .filtro-btn.ativo img { filter: brightness(1); }
 .filtro-btn:hover { background: #333; }
+
+/* Dica Ctrl+clique (#32) */
+.leaflet-ctrl-historico-hint {
+    background: rgba(30,30,30,0.82);
+    color: #bbb;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+}
 
         .busca-onibus-control {
             margin-top: 50px; /* Ajuste conforme necessário */
@@ -1127,6 +1183,17 @@ cidades.forEach(cidade => exibirTemperaturaNoMapa(cidade));
                 }
             });
             new FiltrosControl().addTo(mapa);
+
+            // Dica de Ctrl+clique para histórico (#32)
+            var HintHistorico = L.Control.extend({
+                options: { position: 'bottomleft' },
+                onAdd: function() {
+                    var el = L.DomUtil.create('div', 'leaflet-ctrl-historico-hint');
+                    el.innerHTML = '<i class="fas fa-history mr-1"></i><kbd>Ctrl</kbd>+clique para ver histórico de eventos';
+                    return el;
+                }
+            });
+            new HintHistorico().addTo(mapa);
             // ────────────────────────────────────────────────────────────────────────
 
             L.Control.geocoder({
@@ -1709,6 +1776,133 @@ mapa.addLayer(onibusUrbs);
     });
     setInterval(carregarEventosAtivos,  5 * 60 * 1000); // a cada 5 min
     setInterval(carregarStatusCameras,  2 * 60 * 1000); // a cada 2 min
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Alertas sonoros (#17) ─────────────────────────────────────────────────
+    var audioCtx = null;
+
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+
+    function tocarAlerta(tipo) {
+        try {
+            var ctx    = getAudioCtx();
+            var volume = parseFloat(document.getElementById('som-volume').value || 0.5);
+            var gain   = ctx.createGain();
+            gain.gain.value = volume;
+            gain.connect(ctx.destination);
+
+            var sequencia = tipo === 'offline'
+                ? [{ f: 880, t: 0, d: 0.15 }, { f: 440, t: 0.2, d: 0.25 }]
+                : [{ f: 523, t: 0, d: 0.12 }, { f: 659, t: 0.15, d: 0.12 }, { f: 784, t: 0.3, d: 0.2 }];
+
+            sequencia.forEach(function(nota) {
+                var osc = ctx.createOscillator();
+                osc.type = tipo === 'offline' ? 'sawtooth' : 'sine';
+                osc.frequency.value = nota.f;
+                osc.connect(gain);
+                osc.start(ctx.currentTime + nota.t);
+                osc.stop(ctx.currentTime + nota.t + nota.d);
+            });
+
+            var agora = new Date().toLocaleTimeString('pt-BR');
+            document.getElementById('ultimo-alerta-sonoro').textContent =
+                'Último alerta (' + tipo + '): ' + agora;
+        } catch (e) {
+            console.warn('AudioContext não disponível:', e);
+        }
+    }
+
+    // Estado anterior para detectar mudanças
+    var _eventosCt  = null;
+    var _offlineCt  = null;
+
+    function verificarAlertas() {
+        // Verifica novos eventos
+        if (document.getElementById('som-novos-eventos').checked) {
+            fetch('/eventos-count', { credentials: 'same-origin' })
+                .then(function(r) { return r.ok ? r.json() : null; })
+                .then(function(d) {
+                    if (!d) return;
+                    if (_eventosCt !== null && d.total > _eventosCt) {
+                        tocarAlerta('evento');
+                    }
+                    _eventosCt = d.total;
+                }).catch(function(){});
+        }
+
+        // Verifica câmeras offline
+        if (document.getElementById('som-camera-offline').checked) {
+            fetch('/cameras/status-json', { credentials: 'same-origin' })
+                .then(function(r) { return r.ok ? r.json() : null; })
+                .then(function(d) {
+                    if (!d || !d.summary) return;
+                    if (_offlineCt !== null && d.summary.offline > _offlineCt) {
+                        tocarAlerta('offline');
+                    }
+                    _offlineCt = d.summary.offline;
+                }).catch(function(){});
+        }
+    }
+
+    // Inicia monitoramento após 10s para capturar o estado inicial primeiro
+    setTimeout(function() {
+        verificarAlertas();
+        setInterval(verificarAlertas, 3 * 60 * 1000); // a cada 3 min
+    }, 10000);
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Histórico de eventos no mapa — clique com Ctrl (#32) ─────────────────
+    var marcadorHistorico = null;
+    var popupHistorico    = null;
+
+    mapa.on('click', function(e) {
+        if (!e.originalEvent.ctrlKey) return; // só com Ctrl+clique
+
+        var lat = e.latlng.lat.toFixed(6);
+        var lng = e.latlng.lng.toFixed(6);
+
+        if (marcadorHistorico) mapa.removeLayer(marcadorHistorico);
+
+        marcadorHistorico = L.marker([lat, lng], {
+            icon: L.divIcon({ html: '<i class="fas fa-history" style="color:#e74c3c;font-size:20px;"></i>', iconSize:[20,20], className:'' })
+        }).addTo(mapa);
+
+        marcadorHistorico.bindPopup(
+            '<div style="min-width:200px;"><i class="fas fa-spinner fa-spin"></i> Buscando eventos próximos...</div>'
+        ).openPopup();
+
+        // Busca eventos com coordenadas próximas (±0.05° ≈ 5km)
+        fetch('/eventos-ativos?todos=1', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.json() : []; })
+            .then(function(evs) {
+                var raio = 0.05;
+                var proximos = evs.filter(function(ev) {
+                    return ev.lat && ev.lng &&
+                           Math.abs(ev.lat - lat) < raio &&
+                           Math.abs(ev.lng - lng) < raio;
+                });
+
+                var html = '<b><i class="fas fa-history mr-1"></i>Eventos próximos</b><hr style="margin:4px 0">';
+                if (!proximos.length) {
+                    html += '<small class="text-muted">Nenhum evento cadastrado neste raio.</small>';
+                } else {
+                    proximos.forEach(function(ev) {
+                        html += '<div style="margin-bottom:4px;font-size:12px;">' +
+                            '<i class="fas fa-calendar-check text-warning mr-1"></i><b>' + ev.nome + '</b><br>' +
+                            (ev.local_nome ? '<small class="text-muted">' + ev.local_nome + '</small><br>' : '') +
+                            (ev.data_inicio ? '<small>' + ev.data_inicio + (ev.data_fim ? ' → ' + ev.data_fim : '') + '</small>' : '') +
+                        '</div>';
+                    });
+                }
+                html += '<hr style="margin:4px 0"><small class="text-muted"><i class="fas fa-map-marker-alt mr-1"></i>' + lat + ', ' + lng + '</small>';
+                marcadorHistorico.getPopup().setContent(html).update();
+            }).catch(function() {
+                marcadorHistorico.getPopup().setContent('<small class="text-danger">Erro ao buscar eventos.</small>').update();
+            });
+    });
     // ─────────────────────────────────────────────────────────────────────────
     </script>
 @stop
