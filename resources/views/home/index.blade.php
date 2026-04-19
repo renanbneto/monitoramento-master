@@ -343,6 +343,40 @@
     background-color: #f4f4f4;
 }
 
+/* Filtros rápidos de camadas (#19) */
+.filtros-rapidos-bar {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    background: rgba(30,30,30,0.82);
+    padding: 5px 7px;
+    border-radius: 6px;
+    max-width: calc(100vw - 60px);
+}
+.filtro-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #2a2a2a;
+    color: #ccc;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s, color .15s;
+}
+.filtro-btn img { vertical-align: middle; filter: brightness(0.7); }
+.filtro-btn.ativo {
+    background: #1a6fc4;
+    border-color: #3a8fec;
+    color: #fff;
+}
+.filtro-btn.ativo img { filter: brightness(1); }
+.filtro-btn:hover { background: #333; }
+
         .busca-onibus-control {
             margin-top: 50px; /* Ajuste conforme necessário */
         }
@@ -960,6 +994,45 @@ cidades.forEach(cidade => exibirTemperaturaNoMapa(cidade));
 
             // Desativa a propagação de eventos para impedir que o mapa responda ao toque no painel de layers
             L.DomEvent.disableClickPropagation(document.querySelector('.leaflet-control-layers'));
+
+            // ── Filtros rápidos de camadas (issue #19) ──────────────────────────────
+            var filtrosRapidos = [
+                { key: 'cameras',    layer: layersCameras,   icon: '/images/cam.png',    label: 'Câmeras',    ativo: true  },
+                { key: 'equipes',    layer: guarnicoes,       icon: '/images/vtr.png',    label: 'Equipes PM', ativo: false },
+                { key: 'radios',     layer: radiocom,         icon: '/images/radio.png',  label: 'Rádios/HT',  ativo: false },
+                { key: 'onibus',     layer: onibusUrbs,       icon: '/images/onibus.png', label: 'Ônibus',     ativo: true  },
+                { key: 'chuva',      layer: precipitationLayer, icon: null,              label: 'Chuva',      ativo: false },
+                { key: 'temp',       layer: temperatureLayer,   icon: null,              label: 'Temp.',      ativo: false },
+            ];
+
+            var FiltrosControl = L.Control.extend({
+                options: { position: 'bottomleft' },
+                onAdd: function () {
+                    var bar = L.DomUtil.create('div', 'filtros-rapidos-bar');
+                    filtrosRapidos.forEach(function (f) {
+                        var btn = L.DomUtil.create('button', 'filtro-btn' + (f.ativo ? ' ativo' : ''), bar);
+                        btn.title = f.label;
+                        btn.innerHTML = f.icon
+                            ? '<img src="' + f.icon + '" width="18" height="18"> ' + f.label
+                            : f.label;
+                        if (f.ativo) mapa.addLayer(f.layer);
+                        L.DomEvent.on(btn, 'click', function (e) {
+                            L.DomEvent.stopPropagation(e);
+                            if (mapa.hasLayer(f.layer)) {
+                                mapa.removeLayer(f.layer);
+                                btn.classList.remove('ativo');
+                            } else {
+                                mapa.addLayer(f.layer);
+                                btn.classList.add('ativo');
+                            }
+                        });
+                    });
+                    L.DomEvent.disableClickPropagation(bar);
+                    return bar;
+                }
+            });
+            new FiltrosControl().addTo(mapa);
+            // ────────────────────────────────────────────────────────────────────────
 
             L.Control.geocoder({
                 placeholder: 'Digite o endereço ou nome do local...',

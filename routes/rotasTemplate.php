@@ -48,9 +48,9 @@ Route::get('monitoramento', function(){
 
 Route::get('auth',[LoginController::class, 'auth'])->name('auth');
 Route::get('login',[LoginController::class, 'showFormLogin'])->name('login');
-Route::post('login',[LoginController::class, 'login']);
-Route::post('resendOtp/{id}',[LoginController::class, 'resendOtp'])->name('resend.otp');
-Route::post('recuperarAcesso',[LoginController::class, 'recuperarAcesso'])->name('recuperarAcesso');
+Route::post('login',[LoginController::class, 'login'])->middleware('throttle:10,5');
+Route::post('resendOtp/{id}',[LoginController::class, 'resendOtp'])->name('resend.otp')->middleware('throttle:5,5');
+Route::post('recuperarAcesso',[LoginController::class, 'recuperarAcesso'])->name('recuperarAcesso')->middleware('throttle:5,10');
 
 // rota para reload do captcha
 Route::get('reload-captcha', function(){
