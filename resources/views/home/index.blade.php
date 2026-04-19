@@ -3,6 +3,21 @@
 
 @section('title', 'Mapa')
 
+{{-- Contadores em tempo real no navbar (#16) --}}
+@section('content_top_nav_right')
+    <li class="nav-item d-none d-sm-flex align-items-center mr-2" id="status-bar-navbar" style="gap:6px;">
+        <span class="badge bg-success px-2 py-1" id="nb-cam-online" title="Câmeras online">
+            <i class="fas fa-video mr-1"></i><span id="nb-cam-online-val">—</span>
+        </span>
+        <span class="badge bg-danger px-2 py-1" id="nb-cam-offline" title="Câmeras offline">
+            <i class="fas fa-video-slash mr-1"></i><span id="nb-cam-offline-val">—</span>
+        </span>
+        <span class="badge bg-primary px-2 py-1" id="nb-eventos" title="Eventos ativos">
+            <i class="fas fa-calendar-check mr-1"></i><span id="nb-eventos-val">—</span>
+        </span>
+    </li>
+@stop
+
 @section('content_header')
     {{-- Configurar Breadcrumb em
     app\Http\Controllers\breadcrumbs\BreadCrumbsLocalController.php --}}
@@ -242,6 +257,33 @@
             height: 0 !important;
             padding: 0 !important;
             margin: 0 !important;
+        }
+
+        /* Dark mode — ajustes para elementos customizados do mapa (#18) */
+        .dark-mode .leaflet-control-layers,
+        .dark-mode .leaflet-popup-content-wrapper,
+        .dark-mode .leaflet-popup-tip {
+            background: #2d3035 !important;
+            color: #d0d0d0 !important;
+            border-color: #444 !important;
+        }
+        .dark-mode .leaflet-control-geocoder-form input {
+            background: #3a3f47 !important;
+            color: #e0e0e0 !important;
+            border-color: #555 !important;
+        }
+        .dark-mode .leaflet-bar a {
+            background: #2d3035 !important;
+            color: #ccc !important;
+            border-color: #555 !important;
+        }
+        .dark-mode .filtros-rapidos-bar {
+            background: rgba(15,15,15,0.92) !important;
+        }
+        .dark-mode .select2-container--default .select2-selection--single {
+            background: #3a3f47 !important;
+            color: #e0e0e0 !important;
+            border-color: #555 !important;
         }
     </style>
 @stop
@@ -1093,5 +1135,30 @@ mapa.addLayer(onibusUrbs);
 
 
        TimerBuscaCameras();
+
+    // ── Contadores em tempo real no navbar (#16) ─────────────────────────────
+    function atualizarContadoresNavbar() {
+        fetch('/cameras/status-json', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+                if (!data || !data.summary) return;
+                document.getElementById('nb-cam-online-val').textContent  = data.summary.online  ?? 0;
+                document.getElementById('nb-cam-offline-val').textContent = data.summary.offline ?? 0;
+            })
+            .catch(function(){});
+
+        fetch('/eventos-count', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+                if (data && data.total !== undefined) {
+                    document.getElementById('nb-eventos-val').textContent = data.total;
+                }
+            })
+            .catch(function(){});
+    }
+
+    atualizarContadoresNavbar();
+    setInterval(atualizarContadoresNavbar, 60000); // atualiza a cada 1 min
+    // ─────────────────────────────────────────────────────────────────────────
     </script>
 @stop

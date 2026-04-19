@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class EventoController extends Controller
 {
+    public function count()
+    {
+        return response()->json(['total' => Evento::count()]);
+    }
+
     public function index()
     {
         $eventos = Evento::withCount('cameras')->orderByDesc('data_inicio')->get();
