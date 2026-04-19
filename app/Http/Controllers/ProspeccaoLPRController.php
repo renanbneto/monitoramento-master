@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProspeccaoLPR;
+use App\Support\Audit;
 use Illuminate\Http\Request;
 
 class ProspeccaoLPRController extends Controller
@@ -62,6 +63,10 @@ class ProspeccaoLPRController extends Controller
 
         try {
             $prospeccao = ProspeccaoLPR::create($validated);
+            Audit::log('lpr.create', 'ProspeccaoLPR', $prospeccao->id, [
+                'nome'     => $validated['nome'],
+                'endereco' => $validated['endereco'],
+            ]);
             return response()->json(['success' => true, 'data' => $prospeccao], 201);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Erro ao cadastrar', 'error' => $e->getMessage()], 500);

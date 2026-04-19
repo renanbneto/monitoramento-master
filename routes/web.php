@@ -31,23 +31,29 @@ Route::get('reload-captcha', function () {
 
 Route::group(['middleware' => ['local.auth', 'auth', 'auth2']], function () {
 
-    Route::resource('prospeccoesLPR', ProspeccaoLPRController::class);
-
-    Route::get('/', function () {
-        return view('home.index');
-    })->name('/');
-
-    Route::get('cidades', [CameraController::class, 'cidades'])->name('cidades');
-    Route::get('cameras/view', [CameraController::class, 'view']);
+    // Rotas públicas para todos os operadores autenticados
+    Route::get('/', function () { return view('home.index'); })->name('/');
     Route::get('cameras/status-json', [CameraController::class, 'statusJson'])->name('cameras.status-json');
-    Route::get('mosaicos', [CameraController::class, 'mosaicos'])->name('mosaicos');
+    Route::get('cameras/view', [CameraController::class, 'view']);
+    Route::get('cidades', [CameraController::class, 'cidades'])->name('cidades');
+    Route::get('mosaicos-legacy', [CameraController::class, 'mosaicos'])->name('mosaicos.legacy');
     Route::post('atualizaMosaicos', [CameraController::class, 'atualizaMosaicos'])->name('atualizaMosaicos');
-    Route::resource('cameras', CameraController::class);
-
     Route::get('onibus', [OnibusController::class, 'index']);
-
-    Route::resource('eventos', EventoController::class);
     Route::get('eventos-count', [EventoController::class, 'count'])->name('eventos.count');
 
+    // Mosaicos — todos os operadores (cada um vê apenas os seus, controller verifica)
     Route::resource('mosaicos', MosaicoController::class);
+
+    // Eventos — todos os operadores podem ver/criar; somente Administrador edita/remove
+    Route::resource('eventos', EventoController::class)->except(['edit', 'update', 'destroy']);
+    Route::resource('eventos', EventoController::class)->only(['edit', 'update', 'destroy'])
+         ->middleware('autorizacao:Administrador');
+
+    // Câmeras — somente Administrador pode criar/editar/remover
+    Route::get('cameras/{camera}', [CameraController::class, 'show'])->name('cameras.show');
+    Route::resource('cameras', CameraController::class)->except(['show'])
+         ->middleware('autorizacao:Administrador');
+
+    // Prospecção LPR — todos os operadores autenticados
+    Route::resource('prospeccoesLPR', ProspeccaoLPRController::class);
 });

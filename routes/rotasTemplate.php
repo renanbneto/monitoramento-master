@@ -61,6 +61,7 @@ Route::get('reload-captcha', function(){
 Route::group(['middleware' => ['local.auth','auth','auth2']],function (){
 
     Route::get('auditoria', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware('autorizacao:Administrador;Auditoria')->name('auditoria');
+    Route::get('auditoria-lgpd', [\App\Http\Controllers\AuditLogController::class, 'index'])->middleware('autorizacao:Administrador;Auditoria')->name('auditoria-lgpd');
 
     Route::get('buscarNotificacoes', [NotificacoesController::class,'buscarNotificacoes'])->name('buscarNotificacoes');
     Route::get('exibirNotificacoes', [NotificacoesController::class,'exibirNotificacoes'])->name('exibirNotificacoes');

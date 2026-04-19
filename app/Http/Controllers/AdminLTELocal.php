@@ -55,6 +55,12 @@ class AdminLTELocal
                 'url'         => '/mosaicos',
                 'icon'        => 'fas fa-th-large',
             ],
+            [
+                'text'        => 'Auditoria LGPD',
+                'url'         => '/auditoria-lgpd',
+                'icon'        => 'fas fa-shield-alt',
+                'can'         => ['Administrador', 'Auditoria'],
+            ],
         ];
     }
 
