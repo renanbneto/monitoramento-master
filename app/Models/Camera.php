@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,6 +36,40 @@ class Camera extends Model
         'ativo'             => 'boolean',
         'status_checked_at' => 'datetime',
     ];
+
+    public function getSenhaAttribute(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+        try {
+            return decrypt($value);
+        } catch (DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setSenhaAttribute(?string $value): void
+    {
+        $this->attributes['senha'] = $value !== null && $value !== '' ? encrypt($value) : $value;
+    }
+
+    public function getUsuarioAttribute(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+        try {
+            return decrypt($value);
+        } catch (DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setUsuarioAttribute(?string $value): void
+    {
+        $this->attributes['usuario'] = $value !== null && $value !== '' ? encrypt($value) : $value;
+    }
 
     public function eventos()
     {

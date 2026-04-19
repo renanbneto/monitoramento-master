@@ -35,15 +35,9 @@ Route::get('monitoramento', function(){
 
         if($pdo instanceof PDO){
             $res = DB::select('select 1');
-            return response(['Ok'],200)
-            ->header('Access-Control-Allow-Origin', "*")
-            ->header('Access-Control-Allow-Methods', "PUT, POST, DELETE, GET, OPTIONS")
-            ->header('Access-Control-Allow-Headers', "Accept, Authorization, Content-Type"); 
+            return response(['Ok'],200);
         }else{
-            return response(['Banco de dados não disponivel'],500)
-            ->header('Access-Control-Allow-Origin', "*")
-            ->header('Access-Control-Allow-Methods', "PUT, POST, DELETE, GET, OPTIONS")
-            ->header('Access-Control-Allow-Headers', "Accept, Authorization, Content-Type");   
+            return response(['Banco de dados não disponivel'],500);
         }
         
     }catch(Exception $e){

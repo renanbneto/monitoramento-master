@@ -77,7 +77,7 @@ class SiaAPI extends Controller
             ], $chave);
             
         }catch (\Exception $e){
-            //ddd($e);  // TODO remover após ajustar o retorno com erro
+            //Log::error($e->getMessage(), ['exception' => $e]);
             return ['error' => "Erro ao criar token de acesso ao SIA Auth"];
         }
 
@@ -96,7 +96,7 @@ class SiaAPI extends Controller
             return ['token' => $retorno];
             
         }catch (\Exception $e){
-           //ddd($e);  // TODO remover após ajustar o retorno com erro
+           //Log::error($e->getMessage(), ['exception' => $e]);
            return ['error' => "Erro ao buscar token de Api no SIA Auth"];
             //return response([$e->getMessage()],500);
         }
@@ -127,7 +127,7 @@ class SiaAPI extends Controller
             ], $chave);
             
         }catch (\Exception $e){
-            //ddd($e);  // TODO remover após ajustar o retorno com erro
+            //Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
 
@@ -144,7 +144,7 @@ class SiaAPI extends Controller
             return $retorno->json();
             
         }catch (\Exception $e){
-           // ddd($e);  // TODO remover após ajustar o retorno com erro
+           // Log::error($e->getMessage(), ['exception' => $e]);
             return response([$e->getMessage()],500);
         }
 
@@ -310,7 +310,7 @@ class SiaAPI extends Controller
             return $retorno->json();
 
         }catch (\Exception $e){
-            //ddd($e);  // TODO remover após ajustar o retorno com erro
+            //Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
 
@@ -333,7 +333,7 @@ class SiaAPI extends Controller
             ], $chave);
 
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
 
@@ -352,7 +352,7 @@ class SiaAPI extends Controller
             return $retorno->json();
 
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
 
@@ -374,7 +374,7 @@ class SiaAPI extends Controller
             ], $chave);
 
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
 
@@ -393,7 +393,7 @@ class SiaAPI extends Controller
             return $retorno->json();
 
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
     }
@@ -414,7 +414,7 @@ class SiaAPI extends Controller
             ], $chave);
 
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
 
@@ -447,7 +447,7 @@ class SiaAPI extends Controller
             return $retorno->json();
 
         }catch (\Exception $e){
-            //ddd($e);  // TODO remover após ajustar o retorno com erro
+            //Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
     }
@@ -475,7 +475,7 @@ class SiaAPI extends Controller
             ], $chave);
             
         }catch (\Exception $e){
-            //ddd($e);  // TODO remover após ajustar o retorno com erro
+            //Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
         
@@ -504,7 +504,7 @@ class SiaAPI extends Controller
                 return $retorno->json();
                 
             }catch (\Exception $e){
-                ddd($e);  // TODO remover após ajustar o retorno com erro
+                Log::error($e->getMessage(), ['exception' => $e]);
                 return [];
             }
         }
@@ -532,7 +532,7 @@ class SiaAPI extends Controller
                 ], $chave);
                 
             }catch (\Exception $e){
-                ddd($e);  // TODO remover após ajustar o retorno com erro
+                Log::error($e->getMessage(), ['exception' => $e]);
                 return [];
             }
             
@@ -551,7 +551,7 @@ class SiaAPI extends Controller
                     return $retorno->json();
                     
                 }catch (\Exception $e){
-                    ddd($e);  // TODO remover após ajustar o retorno com erro
+                    Log::error($e->getMessage(), ['exception' => $e]);
                     return [];
                 }
             }
@@ -592,7 +592,7 @@ class SiaAPI extends Controller
                     ], $chave);
                     
                 }catch (\Exception $e){
-                    ddd($e);  // TODO remover após ajustar o retorno com erro
+                    Log::error($e->getMessage(), ['exception' => $e]);
                     return [];
                 }
                 
@@ -611,7 +611,7 @@ class SiaAPI extends Controller
             return $retorno->json();
             
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
     }
@@ -638,7 +638,7 @@ class SiaAPI extends Controller
             ], $chave);
             
         }catch (\Exception $e){
-            ddd($e);  // TODO remover após ajustar o retorno com erro
+            Log::error($e->getMessage(), ['exception' => $e]);
             return [];
         }
         
@@ -657,7 +657,7 @@ class SiaAPI extends Controller
                 return $retorno->json();
                 
             }catch (\Exception $e){
-                ddd($e);  // TODO remover após ajustar o retorno com erro
+                Log::error($e->getMessage(), ['exception' => $e]);
                 return [];
             }
     }
@@ -680,7 +680,7 @@ class SiaAPI extends Controller
                 ], $chave);
                 
             }catch (\Exception $e){
-                ddd($e);  // TODO remover após ajustar o retorno com erro
+                Log::error($e->getMessage(), ['exception' => $e]);
                 return [];
             }
             
@@ -699,7 +699,7 @@ class SiaAPI extends Controller
                     return $retorno->json();
                     
                 }catch (\Exception $e){
-                    ddd($e);  // TODO remover após ajustar o retorno com erro
+                    Log::error($e->getMessage(), ['exception' => $e]);
                     return [];
                 }
             }
@@ -723,7 +723,7 @@ class SiaAPI extends Controller
                     ], $chave);
                     
                 }catch (\Exception $e){
-                    ddd($e);  // TODO remover após ajustar o retorno com erro
+                    Log::error($e->getMessage(), ['exception' => $e]);
                     return [];
                 }
                 
@@ -752,7 +752,7 @@ class SiaAPI extends Controller
                         return $retorno->json();
                         
                     }catch (\Exception $e){
-                        ddd($e);  // TODO remover após ajustar o retorno com erro
+                        Log::error($e->getMessage(), ['exception' => $e]);
                         return [];
                     }
                 }
@@ -773,7 +773,7 @@ class SiaAPI extends Controller
                         ], $chave);
                         
                     }catch (\Exception $e){
-                        ddd($e);  // TODO remover após ajustar o retorno com erro
+                        Log::error($e->getMessage(), ['exception' => $e]);
                         return [];
                     }
                     
@@ -792,7 +792,7 @@ class SiaAPI extends Controller
                             return $retorno->json();
                             
                         }catch (\Exception $e){
-                            ddd($e);  // TODO remover após ajustar o retorno com erro
+                            Log::error($e->getMessage(), ['exception' => $e]);
                             return [];
                         }
                     }
@@ -813,7 +813,7 @@ class SiaAPI extends Controller
                             ], $chave);
                             
                         }catch (\Exception $e){
-                            ddd($e);  // TODO remover após ajustar o retorno com erro
+                            Log::error($e->getMessage(), ['exception' => $e]);
                             return [];
                         }
                         
@@ -832,7 +832,7 @@ class SiaAPI extends Controller
                                 return $retorno->json();
                                 
                             }catch (\Exception $e){
-                                ddd($e);  // TODO remover após ajustar o retorno com erro
+                                Log::error($e->getMessage(), ['exception' => $e]);
                                 return [];
                             }
                         }
@@ -854,7 +854,7 @@ class SiaAPI extends Controller
                                 ], $chave);
                                 
                             }catch (\Exception $e){
-                                ddd($e);  // TODO remover após ajustar o retorno com erro
+                                Log::error($e->getMessage(), ['exception' => $e]);
                                 return [];
                             }
                             
@@ -873,7 +873,7 @@ class SiaAPI extends Controller
                                     return $retorno->json();
                                     
                                 }catch (\Exception $e){
-                                    ddd($e);  // TODO remover após ajustar o retorno com erro
+                                    Log::error($e->getMessage(), ['exception' => $e]);
                                     return [];
                                 }
                             }
@@ -897,7 +897,7 @@ class SiaAPI extends Controller
                                     ], $chave);
                                     
                                 }catch (\Exception $e){
-                                    ddd($e);  // TODO remover após ajustar o retorno com erro
+                                    Log::error($e->getMessage(), ['exception' => $e]);
                                     return [];
                                 }
                                 
@@ -916,7 +916,7 @@ class SiaAPI extends Controller
                                         return array_column(config('sistemas'),"appUrl");
                                         
                                     }catch (\Exception $e){
-                                        // ddd($e);  // TODO remover após ajustar o retorno com erro
+                                        // Log::error($e->getMessage(), ['exception' => $e]);
                                         
                                         return response($e->getMessage(),500);
                                     }        
@@ -941,7 +941,7 @@ class SiaAPI extends Controller
                                         ], $chave);
                             
                                     }catch (\Exception $e){
-                                        //ddd($e);  // TODO remover após ajustar o retorno com erro
+                                        //Log::error($e->getMessage(), ['exception' => $e]);
                                         return [];
                                     }
                                     return ['sw' => $nome_sw,'token' => $token,'ipUsuario' => request()->ip()];

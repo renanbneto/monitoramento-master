@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CameraController extends Controller
 {
@@ -100,11 +101,13 @@ class CameraController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function atualizaMosaicos()
+    public function atualizaMosaicos(Request $request)
     {
-        return User::find(Auth::user()->id)->update([
-            "mosaico" => request()->input('mosaico') ?? '{}'
-        ]);
+        $raw = $request->input('mosaico', '{}');
+        $decoded = json_decode($raw, true);
+        $mosaico = is_array($decoded) ? json_encode($decoded) : '{}';
+
+        return User::find(Auth::id())->update(['mosaico' => $mosaico]);
     }
 
     /**
@@ -127,10 +130,30 @@ class CameraController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'servidor'   => 'nullable|string|max:255',
+            'cidade'     => 'required|string|max:255',
+            'ip'         => 'nullable|string|max:255',
+            'porta'      => 'nullable|integer|min:1|max:65535',
+            'camera'     => 'nullable|string|max:255',
+            'local_nome' => 'required|string|max:255',
+            'lat'        => 'nullable|numeric|between:-90,90',
+            'lng'        => 'nullable|numeric|between:-180,180',
+            'usuario'    => 'nullable|string|max:255',
+            'senha'      => 'nullable|string|max:255',
+            'protocolo'  => 'nullable|string|max:50',
+            'vms'        => 'nullable|string|max:255',
+            'formato'    => 'nullable|string|max:50',
+            'hostname'   => 'nullable|string|max:255',
+            'link'       => 'nullable|string|max:1000',
+            'ativo'      => 'nullable|boolean',
+        ]);
+
         try {
-            Camera::create($request->input());
+            Camera::create($validated);
         } catch (\Throwable $th) {
-            ddd($th->getMessage());
+            Log::error('Erro ao criar câmera: ' . $th->getMessage(), ['exception' => $th]);
+            return back()->withErrors(['error' => 'Erro ao salvar câmera.'])->withInput();
         }
     }
 
@@ -165,17 +188,34 @@ class CameraController extends Controller
      */
     public function update(Request $request, Camera $camera)
     {
+        $validated = $request->validate([
+            'servidor'   => 'nullable|string|max:255',
+            'cidade'     => 'required|string|max:255',
+            'ip'         => 'nullable|string|max:255',
+            'porta'      => 'nullable|integer|min:1|max:65535',
+            'camera'     => 'nullable|string|max:255',
+            'local_nome' => 'required|string|max:255',
+            'lat'        => 'nullable|numeric|between:-90,90',
+            'lng'        => 'nullable|numeric|between:-180,180',
+            'usuario'    => 'nullable|string|max:255',
+            'senha'      => 'nullable|string|max:255',
+            'protocolo'  => 'nullable|string|max:50',
+            'vms'        => 'nullable|string|max:255',
+            'formato'    => 'nullable|string|max:50',
+            'hostname'   => 'nullable|string|max:255',
+            'link'       => 'nullable|string|max:1000',
+            'ativo'      => 'nullable|boolean',
+        ]);
+
+        $validated['ativo'] = $request->boolean('ativo');
+
         try {
-            $dados = $request->input();
-
-
-            $dados["ativo"] = isset($dados["ativo"]) ? true : false;
-
-            $camera->fill($dados);
+            $camera->fill($validated);
             $camera->save();
             return redirect("/cameras/$camera->id/edit");
         } catch (\Throwable $th) {
-            ddd($th->getMessage());
+            Log::error('Erro ao atualizar câmera: ' . $th->getMessage(), ['exception' => $th]);
+            return back()->withErrors(['error' => 'Erro ao atualizar câmera.'])->withInput();
         }
     }
 

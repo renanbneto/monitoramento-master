@@ -3,6 +3,7 @@
 namespace App\apis;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -70,8 +71,8 @@ class Qo {
             ]);
             return $res;
         } catch (\Throwable $th) {
-            ddd($th);
-            return [];//throw $th;
+            Log::error('Qo API error: ' . $th->getMessage(), ['exception' => $th]);
+            return [];
         }
 
     }
