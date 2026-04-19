@@ -6,6 +6,7 @@ use App\Http\Controllers\EventoController;
 use App\Http\Controllers\MosaicoController;
 use App\Http\Controllers\OnibusController;
 use App\Http\Controllers\ProspeccaoLPRController;
+use App\Http\Controllers\RelatorioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ControleController;
 use App\Http\Controllers\ExemploController;
@@ -57,4 +58,14 @@ Route::group(['middleware' => ['local.auth', 'auth', 'auth2']], function () {
 
     // Prospecção LPR — todos os operadores autenticados
     Route::resource('prospeccoesLPR', ProspeccaoLPRController::class);
+
+    // Relatórios e exportações — somente Administrador
+    Route::get('relatorios', [RelatorioController::class, 'index'])->name('relatorios.index')
+         ->middleware('autorizacao:Administrador');
+    Route::get('relatorios/export/cameras', [RelatorioController::class, 'exportCameras'])->name('relatorios.export.cameras')
+         ->middleware('autorizacao:Administrador');
+    Route::get('relatorios/export/eventos', [RelatorioController::class, 'exportEventos'])->name('relatorios.export.eventos')
+         ->middleware('autorizacao:Administrador');
+    Route::get('relatorios/export/lpr', [RelatorioController::class, 'exportLPR'])->name('relatorios.export.lpr')
+         ->middleware('autorizacao:Administrador');
 });

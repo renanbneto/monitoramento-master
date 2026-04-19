@@ -61,6 +61,12 @@ class AdminLTELocal
                 'icon'        => 'fas fa-shield-alt',
                 'can'         => ['Administrador', 'Auditoria'],
             ],
+            [
+                'text'        => 'Relatórios',
+                'url'         => '/relatorios',
+                'icon'        => 'fas fa-file-csv',
+                'can'         => ['Administrador'],
+            ],
         ];
     }
 
