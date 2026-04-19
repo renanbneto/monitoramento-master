@@ -51,72 +51,65 @@
         </div>
     </div>
 
+    {{-- Painel esquerdo — Alertas e informações operacionais (#15) --}}
     <div id="mySidepanelLeft" class="sidepanel sidepanel-left tabs-left d-none" aria-label="side panel" aria-hidden="false">
         <div class="sidepanel-inner-wrapper">
             <nav class="sidepanel-tabs-wrapper" aria-label="sidepanel tab navigation">
                 <ul class="sidepanel-tabs">
-                    <li class="sidepanel-tab">
+                    <li class="sidepanel-tab" title="Grandes Eventos ativos">
                         <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
-                            </svg>
+                            <i class="fas fa-calendar-check fa-lg"></i>
                         </a>
                     </li>
-                    <li class="sidepanel-tab">
+                    <li class="sidepanel-tab" title="Status das câmeras">
                         <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"></path>
-                            </svg>
+                            <i class="fas fa-video fa-lg"></i>
                         </a>
                     </li>
-                    <li class="sidepanel-tab">
+                    <li class="sidepanel-tab" title="Prospecções LPR recentes">
                         <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
-                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bookmarks" viewBox="0 0 16 16">
-                                <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z"></path>
-                                <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z"></path>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="sidepanel-tab">
-                        <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-5">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"></path>
-                                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"></path>
-                            </svg>
+                            <i class="fas fa-search-location fa-lg"></i>
                         </a>
                     </li>
                 </ul>
             </nav>
             <div class="sidepanel-content-wrapper">
                 <div class="sidepanel-content">
-                    <div class="sidepanel-tab-content" data-tab-content="tab-1">
-                        <h4>Content 1</h4>
 
+                    {{-- Tab 1: Grandes Eventos ativos --}}
+                    <div class="sidepanel-tab-content" data-tab-content="tab-1" style="padding:8px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong style="font-size:13px;"><i class="fas fa-calendar-check mr-1 text-warning"></i>Eventos Ativos</strong>
+                            <button class="btn btn-xs btn-outline-secondary" onclick="carregarEventosAtivos()" title="Atualizar">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div id="lista-eventos-ativos">
+                            <p class="text-muted text-center" style="font-size:12px;">Carregando...</p>
+                        </div>
                     </div>
-                    <div class="sidepanel-tab-content" data-tab-content="tab-2">
-                        <h4>Content 2</h4>
 
+                    {{-- Tab 2: Status câmeras --}}
+                    <div class="sidepanel-tab-content" data-tab-content="tab-2" style="padding:8px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong style="font-size:13px;"><i class="fas fa-video mr-1 text-info"></i>Câmeras</strong>
+                            <button class="btn btn-xs btn-outline-secondary" onclick="carregarStatusCameras()" title="Atualizar">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div id="resumo-cameras-painel">
+                            <p class="text-muted text-center" style="font-size:12px;">Carregando...</p>
+                        </div>
                     </div>
-                    <div class="sidepanel-tab-content" data-tab-content="tab-3">
-                        <h4>Content 3</h4>
 
+                    {{-- Tab 3: LPR --}}
+                    <div class="sidepanel-tab-content" data-tab-content="tab-3" style="padding:8px;">
+                        <strong style="font-size:13px;"><i class="fas fa-search-location mr-1 text-primary"></i>Prospecções LPR</strong>
+                        <p class="text-muted mt-2" style="font-size:12px;">
+                            Acesse <a href="/prospeccoesLPR">a página de LPR</a> para consultas e cadastros.
+                        </p>
                     </div>
-                    <div class="sidepanel-tab-content" data-tab-content="tab-4">
-                        <h4>Content 4</h4>
 
-                    </div>
-                    <div class="sidepanel-tab-content" data-tab-content="tab-5">
-                        <h4>Content 5</h4>
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -469,6 +462,20 @@
         .dark-mode .filtros-rapidos-bar {
             background: rgba(15,15,15,0.92) !important;
         }
+        /* Itens do painel de alertas (#15) */
+        .alert-item-painel {
+            border-left: 3px solid #f39c12;
+            background: rgba(243,156,18,0.06);
+            border-radius: 4px;
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .alert-nome { font-size: 13px; margin-bottom: 2px; }
+        .alert-local { font-size: 11px; margin-bottom: 2px; }
+        .alert-meta  { font-size: 11px; color: #888; }
+        .dark-mode .alert-item-painel { background: rgba(243,156,18,0.12); color: #ddd; }
+
         .dark-mode .select2-container--default .select2-selection--single {
             background: #3a3f47 !important;
             color: #e0e0e0 !important;
@@ -483,6 +490,7 @@
 <script src="{{ asset('vendor/leaflet-fullscreen/Control.FullScreen.min.js') }}"></script>
 <script src="{{asset('vendor/leaflet-sidepanel/dist/leaflet-sidepanel.min.js')}}"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 <script src="{{ asset('vendor/select2/dist/js/select2.full.js') }}"></script>
 
 <script>
@@ -1037,6 +1045,35 @@ cidades.forEach(cidade => exibirTemperaturaNoMapa(cidade));
             // Desativa a propagação de eventos para impedir que o mapa responda ao toque no painel de layers
             L.DomEvent.disableClickPropagation(document.querySelector('.leaflet-control-layers'));
 
+            // ── Mapa de calor de câmeras (#27) ──────────────────────────────────────
+            var heatLayer = null;
+
+            function iniciarHeatmap() {
+                if (heatLayer) return; // já carregado
+                var pts = [];
+                layersCameras.eachLayer(function (m) {
+                    if (m.getLatLng) {
+                        pts.push([m.getLatLng().lat, m.getLatLng().lng, 0.6]);
+                    }
+                });
+                if (pts.length === 0) {
+                    // fallback: busca pontos de eventos ativos
+                    fetch('/eventos-ativos', { credentials: 'same-origin' })
+                        .then(function(r) { return r.ok ? r.json() : []; })
+                        .then(function(evs) {
+                            evs.forEach(function(e) {
+                                if (e.lat && e.lng) pts.push([e.lat, e.lng, 1.0]);
+                            });
+                            if (pts.length > 0) {
+                                heatLayer = L.heatLayer(pts, { radius: 35, blur: 20, maxZoom: 17 }).addTo(mapa);
+                            }
+                        }).catch(function(){});
+                } else {
+                    heatLayer = L.heatLayer(pts, { radius: 35, blur: 20, maxZoom: 17 }).addTo(mapa);
+                }
+            }
+            // ────────────────────────────────────────────────────────────────────────
+
             // ── Filtros rápidos de camadas (issue #19) ──────────────────────────────
             var filtrosRapidos = [
                 { key: 'cameras',    layer: layersCameras,   icon: '/images/cam.png',    label: 'Câmeras',    ativo: true  },
@@ -1069,6 +1106,22 @@ cidades.forEach(cidade => exibirTemperaturaNoMapa(cidade));
                             }
                         });
                     });
+
+                    // Botão mapa de calor (#27)
+                    var btnHeat = L.DomUtil.create('button', 'filtro-btn', bar);
+                    btnHeat.title = 'Mapa de calor de câmeras';
+                    btnHeat.innerHTML = '<i class="fas fa-fire"></i> Calor';
+                    L.DomEvent.on(btnHeat, 'click', function (e) {
+                        L.DomEvent.stopPropagation(e);
+                        if (heatLayer && mapa.hasLayer(heatLayer)) {
+                            mapa.removeLayer(heatLayer);
+                            btnHeat.classList.remove('ativo');
+                        } else {
+                            iniciarHeatmap();
+                            btnHeat.classList.add('ativo');
+                        }
+                    });
+
                     L.DomEvent.disableClickPropagation(bar);
                     return bar;
                 }
@@ -1595,6 +1648,67 @@ mapa.addLayer(onibusUrbs);
 
     atualizarContadoresNavbar();
     setInterval(atualizarContadoresNavbar, 60000); // atualiza a cada 1 min
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── Painel lateral esquerdo — Alertas (#15) ───────────────────────────────
+    function carregarEventosAtivos() {
+        var el = document.getElementById('lista-eventos-ativos');
+        if (!el) return;
+        el.innerHTML = '<p class="text-muted text-center" style="font-size:12px;"><i class="fas fa-spinner fa-spin"></i> Carregando...</p>';
+        fetch('/eventos-ativos', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.json() : []; })
+            .then(function(evs) {
+                if (!evs.length) {
+                    el.innerHTML = '<p class="text-muted text-center" style="font-size:12px;">Nenhum evento ativo.</p>';
+                    return;
+                }
+                var html = '';
+                evs.forEach(function(e) {
+                    var temPosicao = e.lat && e.lng && e.lat !== 0 && e.lng !== 0;
+                    html += '<div class="alert-item-painel">' +
+                        '<div class="alert-nome"><i class="fas fa-calendar-check text-warning mr-1"></i><b>' + e.nome + '</b></div>' +
+                        (e.local_nome ? '<div class="alert-local text-muted"><i class="fas fa-map-marker-alt mr-1"></i>' + e.local_nome + '</div>' : '') +
+                        '<div class="alert-meta">' +
+                            (e.data_inicio ? '<span><i class="far fa-clock mr-1"></i>' + e.data_inicio + (e.data_fim ? ' → ' + e.data_fim : '') + '</span>' : '') +
+                            '<span class="ml-2"><i class="fas fa-video mr-1"></i>' + e.cameras + ' cam</span>' +
+                        '</div>' +
+                        (temPosicao ? '<button class="btn btn-xs btn-outline-info mt-1" onclick="mapa.setView([' + e.lat + ',' + e.lng + '],15)">' +
+                            '<i class="fas fa-crosshairs mr-1"></i>Ver no mapa</button>' : '') +
+                    '</div>';
+                });
+                el.innerHTML = html;
+            })
+            .catch(function() {
+                el.innerHTML = '<p class="text-danger text-center" style="font-size:12px;">Erro ao carregar eventos.</p>';
+            });
+    }
+
+    function carregarStatusCameras() {
+        var el = document.getElementById('resumo-cameras-painel');
+        if (!el) return;
+        fetch('/cameras/status-json', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+                if (!data || !data.summary) { el.innerHTML = '<p class="text-muted" style="font-size:12px;">Sem dados.</p>'; return; }
+                var s = data.summary;
+                el.innerHTML =
+                    '<div class="d-flex justify-content-around text-center mt-2">' +
+                        '<div><div class="h4 mb-0 text-success">' + s.online  + '</div><small class="text-muted">Online</small></div>' +
+                        '<div><div class="h4 mb-0 text-danger">'  + s.offline + '</div><small class="text-muted">Offline</small></div>' +
+                        '<div><div class="h4 mb-0 text-secondary">' + (s.total - s.online - s.offline) + '</div><small class="text-muted">Desconh.</small></div>' +
+                        '<div><div class="h4 mb-0">' + s.total + '</div><small class="text-muted">Total</small></div>' +
+                    '</div>';
+            })
+            .catch(function() {});
+    }
+
+    // Carrega ao abrir o painel esquerdo
+    document.addEventListener('DOMContentLoaded', function() {
+        carregarEventosAtivos();
+        carregarStatusCameras();
+    });
+    setInterval(carregarEventosAtivos,  5 * 60 * 1000); // a cada 5 min
+    setInterval(carregarStatusCameras,  2 * 60 * 1000); // a cada 2 min
     // ─────────────────────────────────────────────────────────────────────────
     </script>
 @stop

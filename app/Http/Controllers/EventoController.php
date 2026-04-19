@@ -13,6 +13,28 @@ class EventoController extends Controller
         return response()->json(['total' => Evento::count()]);
     }
 
+    public function jsonAtivos()
+    {
+        $eventos = Evento::where('ativo', true)
+            ->select('id', 'nome', 'descricao', 'local_nome', 'lat', 'lng', 'data_inicio', 'data_fim')
+            ->withCount('cameras')
+            ->orderByDesc('data_inicio')
+            ->get()
+            ->map(fn ($e) => [
+                'id'          => $e->id,
+                'nome'        => $e->nome,
+                'descricao'   => $e->descricao,
+                'local_nome'  => $e->local_nome,
+                'lat'         => (float) $e->lat,
+                'lng'         => (float) $e->lng,
+                'data_inicio' => $e->data_inicio?->format('d/m/Y'),
+                'data_fim'    => $e->data_fim?->format('d/m/Y'),
+                'cameras'     => $e->cameras_count,
+            ]);
+
+        return response()->json($eventos);
+    }
+
     public function index()
     {
         $eventos = Evento::withCount('cameras')->orderByDesc('data_inicio')->get();

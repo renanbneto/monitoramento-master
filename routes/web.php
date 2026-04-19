@@ -40,6 +40,7 @@ Route::group(['middleware' => ['local.auth', 'auth', 'auth2']], function () {
     Route::post('atualizaMosaicos', [CameraController::class, 'atualizaMosaicos'])->name('atualizaMosaicos');
     Route::get('onibus', [OnibusController::class, 'index']);
     Route::get('eventos-count', [EventoController::class, 'count'])->name('eventos.count');
+    Route::get('eventos-ativos', [EventoController::class, 'jsonAtivos'])->name('eventos.ativos');
 
     // Mosaicos — todos os operadores (cada um vê apenas os seus, controller verifica)
     Route::resource('mosaicos', MosaicoController::class);
