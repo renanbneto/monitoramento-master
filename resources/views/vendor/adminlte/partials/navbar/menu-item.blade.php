@@ -20,6 +20,11 @@
         :dropdown-footer-label="$item['dropdown_flabel'] ?? null"
     />
 
+@elseif (($item['type'] ?? '') === 'darkmode-widget')
+
+    {{-- Dark mode toggle widget --}}
+    @include('adminlte::partials.navbar.menu-item-darkmode-widget')
+
 @elseif ($navbarItemHelper->isFullscreen($item))
 
     {{-- Fullscreen toggle widget --}}

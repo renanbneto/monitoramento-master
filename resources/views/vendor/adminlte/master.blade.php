@@ -7,7 +7,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data:; font-src * data:; connect-src *; media-src *; object-src *; child-src *; frame-src *; worker-src *; manifest-src *;">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Custom Meta Tags --}}
@@ -85,6 +84,7 @@
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
+    <script>if(localStorage.getItem('pmpr_dark_mode')==='1')document.body.classList.add('dark-mode');</script>
     <div id="toast-container" class="toast-top-right"></div>
     <div id="loading" style="display: none">
         <img id="loading-image" src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" alt="Loading..." />
